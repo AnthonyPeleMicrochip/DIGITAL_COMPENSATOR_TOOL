@@ -322,7 +322,7 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
     h_file += "#ifndef " + comp_name_string + "_H\n"
     h_file += "#define " + comp_name_string + "_H\n\n"
     h_file += "/***************************************************************************************\n"
-    h_file += "* DSP Coefficient header file generartion in Q15, Q31, Float formats \n"
+    h_file += "* DSP Coefficient header file generation in " + comp_format + " format\n"
     h_file += "****************************************************************************************\n"
     h_file += "* POLES AND ZEROS LOCATIONS:\n"
     h_file += "*   fP0 Pole at Origin Frequency: " + str(FP0_FREQ) + " Hz\n"
@@ -398,24 +398,22 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
     axs[0].set_ylim(plot_min,plot_max)
     axs[0].set_ylabel("Gain [dB]")
     axs[0].set_xlabel("Frequency [Hz]")
-    axs[0].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
     axs[0].grid(True, which="both")
+    axs[0].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
     axs[0].legend()
 
     axs[1].semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.phase_z_with_erosion, label="Digital with erosion", dashes=[6, 2])   # Bode phase plot of Digital Filter (contructed from Analog through bilinear transform)
     axs[1].semilogx(Compensator.bode_data.f_s, Compensator.bode_data.phase_s_with_erosion, label="Analog with erosion")       # Bode phase plot of    Analog Filter
     axs[1].set_ylabel("Phase [°]")
     axs[1].set_xlabel("Frequency [Hz]")
-    axs[1].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
     axs[1].grid(True, which="both")
-    axs[1].legend()
-
+    
     axs[1].semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.phase_z, label="Digital", dashes=[6, 2])   # Bode phase plot of Digital Filter (contructed from Analog through bilinear transform)
     axs[1].semilogx(Compensator.bode_data.f_s, Compensator.bode_data.phase_s, label="Analog")       # Bode phase plot of    Analog Filter
     axs[1].set_ylabel("Phase [°]")
     axs[1].set_xlabel("Frequency [Hz]")
-    axs[1].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
     axs[1].grid(True, which="both")
+    axs[1].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
     axs[1].legend()
 
     plt.show()
