@@ -172,7 +172,6 @@ class filter:
         self.bode_data.h_s = self.transfer_function_s.control_tf.frequency_response(omega=self.bode_data.w_s)
         self.bode_data.mag_s = 20 * np.log10(abs(self.bode_data.h_s.magnitude))
         self.bode_data.phase_s = self.bode_data.h_s.phase * (180/np.pi)
-        #self.bode_data.phase_s_with_erosion = self.bode_data.phase_s
 
     def Calculate_Z_Transfer_Funtion (self):
         # Calculate Z transfert function (data structure) from S transfer function with Fs Sampling frequency
@@ -180,7 +179,6 @@ class filter:
         self.bode_data.h_z = self.transfer_function_z.control_tf.frequency_response(omega=self.bode_data.w_z)
         self.bode_data.mag_z = 20 * np.log10(abs(self.bode_data.h_z.magnitude))    
         self.bode_data.phase_z = self.bode_data.h_z.phase * (180/np.pi)
-        #self.bode_data.phase_z_with_erosion = self.bode_data.phase_z
     
     def Harmonize_DSP_Coefficients_Scaling_Q31 (self):
         # Harmonize all DSP A and B Terms Qn_Fractional bit_shift_scaler to target_bit_shift_scaler
@@ -344,7 +342,7 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
             index += 1
         index = 0
         for each_coeff in Compensator.transfer_function_z.B_Terms_DSP_float:
-            h_file += "#define " + comp_name_string +"_B" + str(index + 1) + "                        (float) " + str(each_coeff) + "\n"
+            h_file += "#define " + comp_name_string +"_B" + str(index) + "                        (float) " + str(each_coeff) + "\n"
             index += 1
         h_file += "\n"
         
@@ -358,7 +356,7 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
             index += 1
         index = 0
         for each_coeff in Compensator.transfer_function_z.B_Terms_DSP_Q31:
-            h_file += "#define " + comp_name_string + "_A" + str(index + 1) + "                          (int32_t) " + str(each_coeff.scaled_value_hex) + "\n"
+            h_file += "#define " + comp_name_string + "_B" + str(index) + "                          (int32_t) " + str(each_coeff.scaled_value_hex) + "\n"
             index += 1
         h_file += "#define " + comp_name_string + "_A_TERMS_BIT_SHIFT_SCALING   (int32_t) " + str(Compensator.transfer_function_z.A_Terms_DSP_Q31[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for A Terms\n"
         h_file += "#define " + comp_name_string + "_B_TERMS_BIT_SHIFT_SCALING   (int32_t) " + str(Compensator.transfer_function_z.B_Terms_DSP_Q31[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for B Terms\n\n"
@@ -374,7 +372,7 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
             index += 1
         index = 0
         for each_coeff in Compensator.transfer_function_z.B_Terms_DSP_Q15:
-            h_file += "#define " + comp_name_string + "_B" + str(index + 1) + "                          (int16_t) " + str(each_coeff.scaled_value_hex) + "\n"
+            h_file += "#define " + comp_name_string + "_B" + str(index) + "                          (int16_t) " + str(each_coeff.scaled_value_hex) + "\n"
             index += 1
         h_file += "#define " + comp_name_string + "_A_TERMS_BIT_SHIFT_SCALING   (int16_t) " + str(Compensator.transfer_function_z.A_Terms_DSP_Q31[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for A Terms\n"
         h_file += "#define " + comp_name_string + "_B_TERMS_BIT_SHIFT_SCALING   (int16_t) " + str(Compensator.transfer_function_z.B_Terms_DSP_Q31[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for B Terms\n\n"
