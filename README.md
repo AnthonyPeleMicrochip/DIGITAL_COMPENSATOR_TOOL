@@ -37,8 +37,6 @@ python -m pip install numpy scipy control matplotlib fxpmath
         ```bash
         python nPnZ_compensator.py other_config_file.json
         ```
-
-
 ## *Config File Content*
 Below is an example:
 ```json
