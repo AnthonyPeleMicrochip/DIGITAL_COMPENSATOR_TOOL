@@ -2,7 +2,7 @@
 #define DPSK4_BUCK_FLOAT_VCOMP_H
 
 /***************************************************************************************
-* DSP Coefficient header file generartion in Q15, Q31, Float formats 
+* DSP Coefficient header file generation in FLOAT format
 ****************************************************************************************
 * POLES AND ZEROS LOCATIONS:
 *   fP0 Pole at Origin Frequency: 1200 Hz
@@ -15,10 +15,10 @@
 #define DPSK4_BUCK_FLOAT_VCOMP_A1                        (float) 1.298029
 #define DPSK4_BUCK_FLOAT_VCOMP_A2                        (float) -0.287124
 #define DPSK4_BUCK_FLOAT_VCOMP_A3                        (float) -0.010905
-#define DPSK4_BUCK_FLOAT_VCOMP_B1                        (float) 3.51655
-#define DPSK4_BUCK_FLOAT_VCOMP_B2                        (float) -3.240454
-#define DPSK4_BUCK_FLOAT_VCOMP_B3                        (float) -3.51134
-#define DPSK4_BUCK_FLOAT_VCOMP_B4                        (float) 3.245665
+#define DPSK4_BUCK_FLOAT_VCOMP_B0                        (float) 3.51655
+#define DPSK4_BUCK_FLOAT_VCOMP_B1                        (float) -3.240454
+#define DPSK4_BUCK_FLOAT_VCOMP_B2                        (float) -3.51134
+#define DPSK4_BUCK_FLOAT_VCOMP_B3                        (float) 3.245665
 
 
 #endif   //DPSK4_BUCK_FLOAT_VCOMP_H

@@ -2,7 +2,7 @@
 #define DPSK4_BUCK_Q15_VCOMP_H
 
 /***************************************************************************************
-* DSP Coefficient header file generartion in Q15, Q31, Float formats 
+* DSP Coefficient header file generation in Q15 format
 ****************************************************************************************
 * POLES AND ZEROS LOCATIONS:
 *   fP0 Pole at Origin Frequency: 90 Hz
@@ -15,10 +15,10 @@
 #define DPSK4_BUCK_Q15_VCOMP_A1                          (int16_t) 0x5312
 #define DPSK4_BUCK_Q15_VCOMP_A2                          (int16_t) 0xEDA0
 #define DPSK4_BUCK_Q15_VCOMP_A3                          (int16_t) 0xFF4E
-#define DPSK4_BUCK_Q15_VCOMP_B1                          (int16_t) 0x4384
-#define DPSK4_BUCK_Q15_VCOMP_B2                          (int16_t) 0xC1C9
-#define DPSK4_BUCK_Q15_VCOMP_B3                          (int16_t) 0xBC96
-#define DPSK4_BUCK_Q15_VCOMP_B4                          (int16_t) 0x3E51
+#define DPSK4_BUCK_Q15_VCOMP_B0                          (int16_t) 0x4384
+#define DPSK4_BUCK_Q15_VCOMP_B1                          (int16_t) 0xC1C9
+#define DPSK4_BUCK_Q15_VCOMP_B2                          (int16_t) 0xBC96
+#define DPSK4_BUCK_Q15_VCOMP_B3                          (int16_t) 0x3E51
 #define DPSK4_BUCK_Q15_VCOMP_A_TERMS_BIT_SHIFT_SCALING   (int16_t) -1  // Common Bit Shift Scaling for A Terms
 #define DPSK4_BUCK_Q15_VCOMP_B_TERMS_BIT_SHIFT_SCALING   (int16_t) 1  // Common Bit Shift Scaling for B Terms
 
