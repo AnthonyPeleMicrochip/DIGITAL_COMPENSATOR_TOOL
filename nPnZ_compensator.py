@@ -387,7 +387,7 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
 
     
     """ BODE PLOTS """
-    CompPlt, axs = plt.subplots(2,1, figsize=(8, 8))
+    CompPlt, axs = plt.subplots(2,1, figsize=(10, 8))
     CompPlt.suptitle(Compensator.name.upper())
     axs[0].semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.mag_z, label="Digital", dashes=[6, 2])   # Bode magnitude plot of Digital Filter (contructed from Analog through bilinear transform)
     axs[0].semilogx(Compensator.bode_data.f_s, Compensator.bode_data.mag_s, label="Analog")       # Bode magnitude plot of Analog Filte
@@ -398,7 +398,12 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
     axs[0].set_xlabel("Frequency [Hz]")
     axs[0].grid(True, which="both")
     axs[0].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
-    axs[0].legend()
+    axs[0].axvline(x=FP0_FREQ, color='k', linestyle='solid', linewidth=2, label=("fP0 @ " + str(FP0_FREQ) + " Hz"))
+    for zero in Zeros:
+        axs[0].axvline(x=zero.freq, color='k', linestyle='dashed', linewidth=2, label=("fZ @ " + str(zero.freq) + " Hz"))
+    for pole in Poles:
+        axs[0].axvline(x=pole.freq, color='k', linestyle='dotted', linewidth=2, label=("fP @ " + str(pole.freq) + " Hz"))
+    axs[0].legend(loc='best', fontsize='small')
 
     axs[1].semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.phase_z_with_erosion, label="Digital with erosion", dashes=[6, 2])   # Bode phase plot of Digital Filter (contructed from Analog through bilinear transform)
     axs[1].semilogx(Compensator.bode_data.f_s, Compensator.bode_data.phase_s_with_erosion, label="Analog with erosion")       # Bode phase plot of    Analog Filter
@@ -412,7 +417,12 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
     axs[1].set_xlabel("Frequency [Hz]")
     axs[1].grid(True, which="both")
     axs[1].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
-    axs[1].legend()
+    axs[1].axvline(x=FP0_FREQ, color='k', linestyle='solid', linewidth=2, label=("fP0 @ " + str(FP0_FREQ) + " Hz"))
+    for zero in Zeros:
+        axs[1].axvline(x=zero.freq, color='k', linestyle='dashed', linewidth=2, label=("fZ @ " + str(zero.freq) + " Hz"))
+    for pole in Poles:
+        axs[1].axvline(x=pole.freq, color='k', linestyle='dotted', linewidth=2, label=("fP @ " + str(pole.freq) + " Hz"))
+    axs[1].legend(loc='upper left', fontsize='small')
 
     plt.show()
     CompPlt.savefig(bode_plot_output, format='pdf')
