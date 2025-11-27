@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>FILTER_CONFIG_GUI_DOCUMENTATION</title>
+  <style>
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+</head>
+<body>
+<section id="filter-configuration-generator-gui---documentation" class="level1">
+<h1>Filter Configuration Generator GUI - Documentation</h1>
+<section id="overview" class="level2">
+<h2>Overview</h2>
+<p>The Filter Configuration Generator GUI is a Python-based graphical user interface built with Tkinter that allows users to create, edit, and manage digital filter configuration files for compensator systems. The tool is specifically designed for nPnZ (n-Pole n-Zero) filter design and interfaces with the <code>nPnZ_compensator.py</code> script to generate filter coefficients.</p>
+</section>
+<section id="requirements" class="level2">
+<h2>Requirements</h2>
+<section id="system-requirements" class="level3">
+<h3>System Requirements</h3>
+<ul>
+<li>Python 3.6 or higher</li>
+<li>Operating System: Windows, Linux, or macOS</li>
+</ul>
+</section>
+<section id="python-dependencies" class="level3">
+<h3>Python Dependencies</h3>
+<ul>
+<li><code>tkinter</code> (usually included with Python)</li>
+<li><code>json</code> (standard library)</li>
+<li><code>subprocess</code> (standard library)</li>
+<li><code>os</code> (standard library)</li>
+<li><code>datetime</code> (standard library)</li>
+</ul>
+</section>
+<section id="additional-files" class="level3">
+<h3>Additional Files</h3>
+<ul>
+<li><code>nPnZ_compensator.py</code> - The coefficient generation script (must be in the same directory)</li>
+</ul>
+</section>
+</section>
+<section id="installation" class="level2">
+<h2>Installation</h2>
+<ol type="1">
+<li><p>Ensure Python 3.6+ is installed on your system</p></li>
+<li><p>Download <code>filter_config_gui.py</code> to your working directory</p></li>
+<li><p>Place <code>nPnZ_compensator.py</code> in the same directory</p></li>
+<li><p>Run the GUI:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> filter_config_gui.py</span></code></pre></div></li>
+</ol>
+</section>
+<section id="user-interface-layout" class="level2">
+<h2>User Interface Layout</h2>
+<p>The GUI is organized into three main sections:</p>
+<section id="general-information-left-panel" class="level3">
+<h3>1. General Information (Left Panel)</h3>
+<p>Contains metadata and identification fields for the filter:</p>
+<ul>
+<li><strong>Filter Name</strong>: Unique identifier for your filter configuration
+<ul>
+<li>This name is used to auto-generate other filenames</li>
+<li>Example: <code>dpsk4_buck_float_vcomp</code></li>
+</ul></li>
+<li><strong>H File Name (auto)</strong>: Read-only field, automatically generated from Filter Name
+<ul>
+<li>Format: PascalCase with underscores + <code>.h</code> extension</li>
+<li>Example: <code>Dpsk4_Buck_Float_Vcomp.h</code></li>
+</ul></li>
+<li><strong>Bode Plot Output</strong>: Output filename for the Bode plot
+<ul>
+<li>Auto-generated from Filter Name but remains editable</li>
+<li>Format: PascalCase with underscores + <code>_Bode_Plot.pdf</code></li>
+<li>Example: <code>Dpsk4_Buck_Float_Vcomp_Bode_Plot.pdf</code></li>
+</ul></li>
+<li><strong>Filter Type</strong>: Dropdown selection for filter topology
+<ul>
+<li>Options: 1P1Z, 2P2Z, 3P3Z, 4P4Z, 5P5Z, 6P6Z</li>
+<li>Default: 3P3Z</li>
+</ul></li>
+<li><strong>Author</strong>: Name and identifier of the filter designer
+<ul>
+<li>Example: <code>Anthony PELE - M24683</code></li>
+</ul></li>
+<li><strong>Description</strong>: Multi-line text field for filter documentation
+<ul>
+<li>Describe the purpose and application of the filter</li>
+</ul></li>
+</ul>
+<p><strong>Auto-generated fields (not shown in UI):</strong> - Version: Always set to “1.0.0” - Company: Always set to “Microchip Technology Inc.” - Date: Automatically set to current date (YYYY-MM-DD format)</p>
+</section>
+<section id="filter-parameters-right-panel" class="level3">
+<h3>2. Filter Parameters (Right Panel)</h3>
+<p>Technical parameters for the filter design and Bode plot generation:</p>
+<ul>
+<li><strong>Bode Plot Min Freq (10^N)</strong>: Minimum frequency for Bode plot as power of 10
+<ul>
+<li>Range: -10 to 10</li>
+<li>Default: 0 (represents 10^0 = 1 Hz)</li>
+</ul></li>
+<li><strong>Bode Plot Max Freq (10^N)</strong>: Maximum frequency for Bode plot as power of 10
+<ul>
+<li>Range: -10 to 10</li>
+<li>Default: 6 (represents 10^6 = 1 MHz)</li>
+</ul></li>
+<li><strong>Bode Plot Nb Points</strong>: Number of frequency points for Bode plot
+<ul>
+<li>Default: 1000</li>
+<li>Higher values provide smoother plots but increase computation time</li>
+</ul></li>
+<li><strong>Sampling Frequency (Hz)</strong>: Digital system sampling frequency
+<ul>
+<li>Units: Hertz (Hz)</li>
+<li>Default: 500000 (500 kHz)</li>
+<li>Must match your target system’s sampling frequency</li>
+</ul></li>
+<li><strong>Digital Filter Time Delay (s)</strong>: Estimated computational delay
+<ul>
+<li>Units: Seconds</li>
+<li>Default: 700e-9 (700 nanoseconds)</li>
+<li>Accounts for digital processing latency</li>
+</ul></li>
+<li><strong>ADC Trigger Point Delay (s)</strong>: ADC sampling timing offset
+<ul>
+<li>Units: Seconds</li>
+<li>Default: 1e-6 (1 microsecond)</li>
+<li>Accounts for ADC conversion time and trigger timing</li>
+</ul></li>
+<li><strong>Coefficient Format</strong>: Number format for filter coefficients
+<ul>
+<li>Options:
+<ul>
+<li><strong>float</strong>: Floating-point representation (32-bit or 64-bit)</li>
+<li><strong>Q15</strong>: Fixed-point Q15 format (16-bit signed, 1 sign + 15 fractional bits)</li>
+<li><strong>Q31</strong>: Fixed-point Q31 format (32-bit signed, 1 sign + 31 fractional bits)</li>
+</ul></li>
+<li>Default: float</li>
+</ul></li>
+</ul>
+</section>
+<section id="frequencies-configuration-bottom-panel" class="level3">
+<h3>3. Frequencies Configuration (Bottom Panel)</h3>
+<p>Defines the pole and zero locations for the filter transfer function:</p>
+<section id="integrator-pole" class="level4">
+<h4>Integrator Pole</h4>
+<ul>
+<li>Single pole at low frequency to provide DC gain</li>
+<li>Fixed to one entry (cannot add/remove)</li>
+<li>Frequency in Hz</li>
+<li>Default: 1200 Hz</li>
+</ul>
+</section>
+<section id="zeros" class="level4">
+<h4>Zeros</h4>
+<ul>
+<li>Add multiple zeros to shape the frequency response</li>
+<li>Each zero entry includes:
+<ul>
+<li>Frequency (Hz)</li>
+<li>Type: Automatically set to “Zero”</li>
+</ul></li>
+<li>Use “+ Add Zero” button to add more zeros</li>
+<li>Use “Remove” button to delete individual zeros</li>
+<li>Default: Two zeros at 2551 Hz and 3827 Hz</li>
+</ul>
+</section>
+<section id="poles" class="level4">
+<h4>Poles</h4>
+<ul>
+<li>Add multiple poles to stabilize the filter</li>
+<li>Each pole entry includes:
+<ul>
+<li>Frequency (Hz)</li>
+<li>Type: Automatically set to “Pole”</li>
+</ul></li>
+<li>Use “+ Add Pole” button to add more poles</li>
+<li>Use “Remove” button to delete individual poles</li>
+<li>Default: Two poles at 80000 Hz and 170000 Hz</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="action-buttons" class="level2">
+<h2>Action Buttons</h2>
+<section id="load-json" class="level3">
+<h3>📂 Load JSON</h3>
+<ul>
+<li>Opens a file browser to select an existing JSON configuration file</li>
+<li>Default directory: Same folder as the Python script</li>
+<li>Loads all parameters from the selected file into the GUI</li>
+<li>Validates JSON structure before loading</li>
+</ul>
+</section>
+<section id="generate-coefficients" class="level3">
+<h3>⚙️ Generate Coefficients</h3>
+<p>Performs the following actions: 1. Collects all current parameters from the GUI 2. Generates JSON configuration file with format: <code>&lt;filter_name&gt;.json</code> 3. Saves JSON file in the same directory as the Python script 4. Executes: <code>python nPnZ_compensator.py &lt;filter_name&gt;.json</code> 5. Displays output in a popup window showing: - Configuration file path - Command executed - Standard output (STDOUT) - Standard error (STDERR) - Execution status</p>
+</section>
+</section>
+<section id="file-format" class="level2">
+<h2>File Format</h2>
+<section id="json-configuration-structure" class="level3">
+<h3>JSON Configuration Structure</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;filter_name&quot;</span><span class="fu">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;h_file_name&quot;</span><span class="fu">:</span> <span class="st">&quot;Filter_Name.h&quot;</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;bode_plot_output_file_name&quot;</span><span class="fu">:</span> <span class="st">&quot;Filter_Name_Bode_Plot.pdf&quot;</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;3P3Z&quot;</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="st">&quot;1.0.0&quot;</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Description of the filter&quot;</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;author&quot;</span><span class="fu">:</span> <span class="st">&quot;Author Name&quot;</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;company&quot;</span><span class="fu">:</span> <span class="st">&quot;Microchip Technology Inc.&quot;</span><span class="fu">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;date&quot;</span><span class="fu">:</span> <span class="st">&quot;2025-11-26&quot;</span><span class="fu">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;filter_parameters&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;BODE_PLOT_MIN_FREQ_10powerN&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;BODE_PLOT_MAX_FREQ_10powerN&quot;</span><span class="fu">:</span> <span class="dv">6</span><span class="fu">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;BODE_PLOT_NB_POINTS&quot;</span><span class="fu">:</span> <span class="dv">1000</span><span class="fu">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;SAMPLING_FREQUENCY_HZ&quot;</span><span class="fu">:</span> <span class="dv">500000</span><span class="fu">,</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S&quot;</span><span class="fu">:</span> <span class="dv">7e-07</span><span class="fu">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;ESTIMATED_ADC_TRIGGER_POINT_DELAY&quot;</span><span class="fu">:</span> <span class="dv">1e-06</span><span class="fu">,</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;coefficient_format&quot;</span><span class="fu">:</span> <span class="st">&quot;float&quot;</span><span class="fu">,</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;frequencies_Hz&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;Integrator_pole&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="dv">1200</span><span class="fu">,</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;Integrator&quot;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                <span class="fu">}</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>            <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;Zeros&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="dv">2551</span><span class="fu">,</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;Zero&quot;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="dv">3827</span><span class="fu">,</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;Zero&quot;</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                <span class="fu">}</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>            <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;Poles&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="dv">80000</span><span class="fu">,</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;Pole&quot;</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="dv">170000</span><span class="fu">,</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;Pole&quot;</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>                <span class="fu">}</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>            <span class="ot">]</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</section>
+</section>
+<section id="workflow-examples" class="level2">
+<h2>Workflow Examples</h2>
+<section id="example-1-creating-a-new-filter-configuration" class="level3">
+<h3>Example 1: Creating a New Filter Configuration</h3>
+<ol type="1">
+<li>Launch the GUI: <code>python filter_config_gui.py</code></li>
+<li>Enter general information:
+<ul>
+<li>Filter Name: <code>buck_converter_vmode</code></li>
+<li>Author: <code>John Doe - M12345</code></li>
+<li>Description: <code>Voltage mode buck converter compensator</code></li>
+</ul></li>
+<li>Set filter type: <code>3P3Z</code></li>
+<li>Configure filter parameters:
+<ul>
+<li>Sampling Frequency: 250000 Hz (250 kHz)</li>
+<li>Coefficient Format: <code>Q15</code></li>
+</ul></li>
+<li>Set frequencies:
+<ul>
+<li>Integrator Pole: 800 Hz</li>
+<li>Zeros: 3000 Hz, 5000 Hz</li>
+<li>Poles: 50000 Hz, 100000 Hz</li>
+</ul></li>
+<li>Click “⚙️ Generate Coefficients”</li>
+<li>Review output in popup window</li>
+<li>Files generated:
+<ul>
+<li><code>buck_converter_vmode.json</code></li>
+<li><code>Buck_Converter_Vmode.h</code> (generated by nPnZ_compensator.py)</li>
+<li><code>Buck_Converter_Vmode_Bode_Plot.pdf</code> (generated by nPnZ_compensator.py)</li>
+</ul></li>
+</ol>
+</section>
+<section id="example-2-modifying-an-existing-configuration" class="level3">
+<h3>Example 2: Modifying an Existing Configuration</h3>
+<ol type="1">
+<li>Launch the GUI</li>
+<li>Click “📂 Load JSON”</li>
+<li>Select your existing configuration file</li>
+<li>Modify desired parameters</li>
+<li>Click “⚙️ Generate Coefficients” to regenerate</li>
+</ol>
+</section>
+<section id="example-3-comparing-different-coefficient-formats" class="level3">
+<h3>Example 3: Comparing Different Coefficient Formats</h3>
+<ol type="1">
+<li>Create base configuration with <code>float</code> format</li>
+<li>Generate coefficients</li>
+<li>Change Coefficient Format to <code>Q15</code></li>
+<li>Rename Filter Name to append <code>_q15</code></li>
+<li>Generate coefficients</li>
+<li>Compare the output files</li>
+</ol>
+</section>
+</section>
+<section id="tips-and-best-practices" class="level2">
+<h2>Tips and Best Practices</h2>
+<section id="filter-design-guidelines" class="level3">
+<h3>Filter Design Guidelines</h3>
+<ol type="1">
+<li><strong>Pole-Zero Placement</strong>:
+<ul>
+<li>Place zeros below the desired crossover frequency to boost gain</li>
+<li>Place poles above crossover frequency to attenuate high-frequency noise</li>
+<li>Integrator pole provides DC gain and steady-state accuracy</li>
+</ul></li>
+<li><strong>Sampling Frequency</strong>:
+<ul>
+<li>Choose at least 10x higher than the highest pole/zero frequency</li>
+<li>Higher sampling rates provide better digital approximation</li>
+</ul></li>
+<li><strong>Coefficient Format Selection</strong>:
+<ul>
+<li>Use <code>float</code> for initial design and simulation</li>
+<li>Use <code>Q15</code> for 16-bit microcontrollers (limited dynamic range)</li>
+<li>Use <code>Q31</code> for 32-bit microcontrollers (better precision)</li>
+</ul></li>
+<li><strong>Naming Conventions</strong>:
+<ul>
+<li>Use descriptive filter names: <code>&lt;application&gt;_&lt;topology&gt;_&lt;version&gt;</code></li>
+<li>Example: <code>buck_vmode_rev2</code>, <code>boost_cmode_final</code></li>
+</ul></li>
+</ol>
+</section>
+<section id="troubleshooting" class="level3">
+<h3>Troubleshooting</h3>
+<p><strong>Issue</strong>: “nPnZ_compensator.py not found” warning - <strong>Solution</strong>: Ensure <code>nPnZ_compensator.py</code> is in the same directory as <code>filter_config_gui.py</code></p>
+<p><strong>Issue</strong>: GUI window too small on high-DPI displays - <strong>Solution</strong>: Adjust window size in code or use OS scaling settings</p>
+<p><strong>Issue</strong>: Cannot load JSON file - <strong>Solution</strong>: Verify JSON syntax is valid using a JSON validator</p>
+<p><strong>Issue</strong>: Generated coefficients overflow in Q15 format - <strong>Solution</strong>: - Reduce gain by adjusting pole/zero frequencies - Switch to Q31 format for higher dynamic range - Scale the input/output signals in your application</p>
+</section>
+</section>
+<section id="advanced-usage" class="level2">
+<h2>Advanced Usage</h2>
+<section id="batch-processing" class="level3">
+<h3>Batch Processing</h3>
+<p>Create multiple configurations programmatically:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>base_config <span class="op">=</span> {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ... base configuration ...</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> freq <span class="kw">in</span> [<span class="dv">50000</span>, <span class="dv">100000</span>, <span class="dv">150000</span>]:</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    config <span class="op">=</span> base_config.copy()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    config[<span class="st">&quot;name&quot;</span>] <span class="op">=</span> <span class="ss">f&quot;filter_</span><span class="sc">{</span>freq<span class="sc">}</span><span class="ss">Hz&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    config[<span class="st">&quot;filter_parameters&quot;</span>][<span class="st">&quot;SAMPLING_FREQUENCY_HZ&quot;</span>] <span class="op">=</span> freq</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="ss">f&quot;filter_</span><span class="sc">{</span>freq<span class="sc">}</span><span class="ss">Hz.json&quot;</span>, <span class="st">&#39;w&#39;</span>) <span class="im">as</span> f:</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        json.dump(config, f, indent<span class="op">=</span><span class="dv">4</span>)</span></code></pre></div>
+</section>
+<section id="integration-with-other-tools" class="level3">
+<h3>Integration with Other Tools</h3>
+<p>The JSON output can be used with: - MATLAB/Octave for analysis - Python control systems libraries (scipy.signal) - Custom visualization tools - Automated testing frameworks</p>
+</section>
+</section>
+<section id="support-and-contact" class="level2">
+<h2>Support and Contact</h2>
+<p>For issues, questions, or feature requests related to the GUI, please contact your system administrator or the tool maintainer.</p>
+<p>For issues with the <code>nPnZ_compensator.py</code> script, refer to its separate documentation.</p>
+</section>
+<section id="version-history" class="level2">
+<h2>Version History</h2>
+<ul>
+<li><strong>v1.0</strong> (2025-11-26): Initial release
+<ul>
+<li>Basic filter configuration GUI</li>
+<li>Support for 1P1Z to 6P6Z filters</li>
+<li>Float, Q15, and Q31 coefficient formats</li>
+<li>Auto-generation of filenames</li>
+<li>Direct integration with nPnZ_compensator.py</li>
+</ul></li>
+</ul>
+</section>
+<section id="license" class="level2">
+<h2>License</h2>
+<p>This tool is provided for use within Microchip Technology Inc. projects. Refer to your organization’s software licensing policy for usage terms.</p>
+</section>
+</section>
+</body>
+</html>
