@@ -3,6 +3,15 @@
 <img src="./_source_docs/microchip-logo2.png" width="200"/>
 </div>
 
+<style>
+r { color: Red }
+o { color: Orange }
+g { color: Green }
+</style>
+
+<r>*This script can be used and called by a GUI. See low link for details:*</r>
+[GUI User's Guide)](./FILTER_CONFIG_GUI_DOCUMENTATION.md)
+
 # *Digital Compensator Tool User's Guide*
 
 
@@ -185,6 +194,11 @@ s
 - Author: Anthony PELE (MICROCHIP TECHNOLOGY INC.)
 - To raise issues or change/upgrade requests, please send an email to following address (answer is not guaranteed)
     <a href="mailto:anthony.pele@microchip.com">anthony.pele@microchip.com</a>
+
+## *License*
+
+This tool is provided for use within Microchip Technology Inc. projects. Refer to your organization's software licensing policy for usage terms.
+
 
 <div>
 <img src="./_source_docs/microchip-logo2.png" width="200"/>

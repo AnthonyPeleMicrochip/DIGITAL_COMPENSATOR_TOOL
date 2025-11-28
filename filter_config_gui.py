@@ -5,12 +5,13 @@ Creates and manages filter configuration JSON files for digital compensators
 """
 
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, scrolledtext
+from tkinter import ttk, filedialog, messagebox, scrolledtext, font
 import json
 import subprocess
 import sys
 import os
 from datetime import date
+import math
 
 
 class FilterConfigGUI:
@@ -64,7 +65,7 @@ class FilterConfigGUI:
     
     def create_widgets(self):
         # Create main container with scrollbar
-        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame = ttk.Frame(self.root)
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
         self.root.columnconfigure(0, weight=1)
@@ -93,40 +94,48 @@ class FilterConfigGUI:
         gen_frame = ttk.LabelFrame(scrollable_frame, text="General Information", padding="10")
         gen_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5, padx=(0, 5))
         
+
         # Filter Name
-        ttk.Label(gen_frame, text="Filter Name:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        row_number=0
+        ttk.Label(gen_frame, text="Filter Name:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.name_var = tk.StringVar(value=self.config["name"])
         self.name_var.trace_add("write", self.update_auto_filenames)
-        ttk.Entry(gen_frame, textvariable=self.name_var, width=40).grid(row=0, column=1, pady=5, padx=5)
+        ttk.Entry(gen_frame, textvariable=self.name_var, width=40).grid(row=row_number, column=1, pady=5, padx=5)
         
-        # H File Name (auto-generated, read-only)
-        ttk.Label(gen_frame, text="H File Name (auto):").grid(row=1, column=0, sticky=tk.W, pady=5)
+        # H File Name (auto-generated)
+        row_number += 1
+        ttk.Label(gen_frame, text="C Code .h Header File Name (Generated):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.h_file_var = tk.StringVar(value=self.config["h_file_name"])
-        h_entry = ttk.Entry(gen_frame, textvariable=self.h_file_var, width=40, state="readonly")
-        h_entry.grid(row=1, column=1, pady=5, padx=5)
+        #h_entry = ttk.Entry(gen_frame, textvariable=self.h_file_var, width=40, state="readonly")
+        h_entry = ttk.Entry(gen_frame, textvariable=self.h_file_var, width=40)
+        h_entry.grid(row=row_number, column=1, pady=5, padx=5)
         
         # Bode Plot Output File Name
-        ttk.Label(gen_frame, text="Bode Plot Output:").grid(row=2, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(gen_frame, text="Bode Plot pdf file name (Generated):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.bode_var = tk.StringVar(value=self.config["bode_plot_output_file_name"])
-        ttk.Entry(gen_frame, textvariable=self.bode_var, width=40).grid(row=2, column=1, pady=5, padx=5)
+        ttk.Entry(gen_frame, textvariable=self.bode_var, width=40).grid(row=row_number, column=1, pady=5, padx=5)
         
         # Filter Type
-        ttk.Label(gen_frame, text="Filter Type:").grid(row=3, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(gen_frame, text="Filter Type:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.type_var = tk.StringVar(value=self.config["type"])
         type_combo = ttk.Combobox(gen_frame, textvariable=self.type_var, 
                                    values=["1P1Z", "2P2Z", "3P3Z", "4P4Z", "5P5Z", "6P6Z"],
                                    state="readonly", width=37)
-        type_combo.grid(row=3, column=1, pady=5, padx=5)
+        type_combo.grid(row=row_number, column=1, pady=5, padx=5)
         
         # Author
-        ttk.Label(gen_frame, text="Author:").grid(row=4, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(gen_frame, text="Author:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.author_var = tk.StringVar(value=self.config["author"])
-        ttk.Entry(gen_frame, textvariable=self.author_var, width=40).grid(row=4, column=1, pady=5, padx=5)
+        ttk.Entry(gen_frame, textvariable=self.author_var, width=40).grid(row=row_number, column=1, pady=5, padx=5)
         
         # Description
-        ttk.Label(gen_frame, text="Description:").grid(row=5, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(gen_frame, text="Description:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.desc_text = tk.Text(gen_frame, width=40, height=3)
-        self.desc_text.grid(row=5, column=1, pady=5, padx=5)
+        self.desc_text.grid(row=row_number, column=1, pady=5, padx=5)
         self.desc_text.insert("1.0", self.config["description"])
         
         # ===== FILTER PARAMETERS SECTION (RIGHT) =====
@@ -134,46 +143,77 @@ class FilterConfigGUI:
         param_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5, padx=(5, 0))
         
         # Bode Plot Min Freq
-        ttk.Label(param_frame, text="Bode Plot Min Freq (10^N):").grid(row=0, column=0, sticky=tk.W, pady=5)
+        row_number = 0
+        ttk.Label(param_frame, text="Bode Plot Min Freq (10\u207F):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.min_freq_var = tk.IntVar(value=self.config["filter_parameters"]["BODE_PLOT_MIN_FREQ_10powerN"])
-        ttk.Spinbox(param_frame, from_=-10, to=10, textvariable=self.min_freq_var, width=37).grid(row=0, column=1, pady=5, padx=5)
+        ttk.Spinbox(param_frame, from_=-10, to=10, textvariable=self.min_freq_var, width=27).grid(row=row_number, column=1, pady=5, padx=5)
+        
+        row_number += 1
+        label_font = font.Font(slant="italic", size=12)
+        self.bode_min_label_var = tk.StringVar()
+        ttk.Label(
+            param_frame,
+            font=label_font,
+            textvariable=self.bode_min_label_var
+            ).grid(row=row_number, column=1, sticky=tk.W, pady=5)
+        # Link changes of Bode freq exponents to label updates
+        self.min_freq_var.trace_add("write", self.update_bode_labels)
+        
         
         # Bode Plot Max Freq
-        ttk.Label(param_frame, text="Bode Plot Max Freq (10^N):").grid(row=1, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(param_frame, text="Bode Plot Max Freq (10\u207F):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.max_freq_var = tk.IntVar(value=self.config["filter_parameters"]["BODE_PLOT_MAX_FREQ_10powerN"])
-        ttk.Spinbox(param_frame, from_=-10, to=10, textvariable=self.max_freq_var, width=37).grid(row=1, column=1, pady=5, padx=5)
+        ttk.Spinbox(param_frame, from_=-10, to=10, textvariable=self.max_freq_var, width=27).grid(row=row_number, column=1, pady=5, padx=5)
+        
+        row_number += 1
+        label_font = font.Font(slant="italic", size=12)
+        self.bode_max_label_var = tk.StringVar()
+        ttk.Label(
+            param_frame,
+            font=label_font,
+            textvariable=self.bode_max_label_var
+            ).grid(row=row_number, column=1, sticky=tk.W, pady=5)
+        # Link changes of Bode freq exponents to label updates
+        self.max_freq_var.trace_add("write", self.update_bode_labels)
+        
         
         # Bode Plot Number of Points
-        ttk.Label(param_frame, text="Bode Plot Nb Points:").grid(row=2, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(param_frame, text="Bode Plot Nb Points:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.nb_points_var = tk.IntVar(value=self.config["filter_parameters"]["BODE_PLOT_NB_POINTS"])
-        ttk.Entry(param_frame, textvariable=self.nb_points_var, width=40).grid(row=2, column=1, pady=5, padx=5)
+        ttk.Entry(param_frame, textvariable=self.nb_points_var, width=30).grid(row=row_number, column=1, pady=5, padx=5)
         
         # Sampling Frequency
-        ttk.Label(param_frame, text="Sampling Frequency (Hz):").grid(row=3, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(param_frame, text="Sampling Frequency (Hz):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.sampling_freq_var = tk.DoubleVar(value=self.config["filter_parameters"]["SAMPLING_FREQUENCY_HZ"])
-        ttk.Entry(param_frame, textvariable=self.sampling_freq_var, width=40).grid(row=3, column=1, pady=5, padx=5)
+        ttk.Entry(param_frame, textvariable=self.sampling_freq_var, width=30).grid(row=row_number, column=1, pady=5, padx=5)
         
         # Digital Filter Time Delay
-        ttk.Label(param_frame, text="Digital Filter Time Delay (s):").grid(row=4, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(param_frame, text="Digital Filter Time Delay (s):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.filter_delay_var = tk.DoubleVar(value=self.config["filter_parameters"]["ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S"])
-        ttk.Entry(param_frame, textvariable=self.filter_delay_var, width=40).grid(row=4, column=1, pady=5, padx=5)
+        ttk.Entry(param_frame, textvariable=self.filter_delay_var, width=30).grid(row=row_number, column=1, pady=5, padx=5)
         
         # ADC Trigger Point Delay
-        ttk.Label(param_frame, text="ADC Trigger Point Delay (s):").grid(row=5, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(param_frame, text="ADC Trigger Point Delay (s):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.adc_delay_var = tk.DoubleVar(value=self.config["filter_parameters"]["ESTIMATED_ADC_TRIGGER_POINT_DELAY"])
-        ttk.Entry(param_frame, textvariable=self.adc_delay_var, width=40).grid(row=5, column=1, pady=5, padx=5)
+        ttk.Entry(param_frame, textvariable=self.adc_delay_var, width=30).grid(row=row_number, column=1, pady=5, padx=5)
         
         # Coefficient Format
-        ttk.Label(param_frame, text="Coefficient Format:").grid(row=6, column=0, sticky=tk.W, pady=5)
+        row_number += 1
+        ttk.Label(param_frame, text="Coefficient Format:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.coef_format_var = tk.StringVar(value=self.config["filter_parameters"]["coefficient_format"])
         coef_combo = ttk.Combobox(param_frame, textvariable=self.coef_format_var, 
                                    values=["float", "Q15", "Q31"],
-                                   state="readonly", width=37)
-        coef_combo.grid(row=6, column=1, pady=5, padx=5)
+                                   state="readonly", width=27)
+        coef_combo.grid(row=row_number, column=1, pady=5, padx=5)
         
         # ===== FREQUENCIES SECTION =====
         freq_frame = ttk.LabelFrame(scrollable_frame, text="Frequencies Configuration", padding="10")
-        freq_frame.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=5)
+        freq_frame.grid(row=1, column=0, columnspan=1, sticky=(tk.W, tk.E), pady=5)
         
         # Integrator Pole
         ttk.Label(freq_frame, text="Integrator Pole (Hz):", font=("", 10, "bold")).grid(row=0, column=0, sticky=tk.W, pady=5)
@@ -198,6 +238,12 @@ class FilterConfigGUI:
         
         ttk.Button(freq_frame, text="+ Add Pole", command=lambda: self.add_frequency("Poles")).grid(row=6, column=0, columnspan=3, pady=5)
         
+        # ===== BODE PLOT SECTION =====
+        bode_frame = ttk.LabelFrame(scrollable_frame, text="Bode Plot", padding="10")
+        bode_frame.grid(row=1, column=1, columnspan=1, sticky=(tk.W, tk.E), pady=5)
+        
+
+        
         # ===== ACTION BUTTONS =====
         button_frame = ttk.Frame(scrollable_frame, padding="10")
         button_frame.grid(row=2, column=0, columnspan=2, pady=10)
@@ -215,6 +261,36 @@ class FilterConfigGUI:
         # Generate Bode plot filename from filter name
         bode_filename = pascal_case + '_Bode_Plot.pdf'
         self.bode_var.set(bode_filename)
+        
+    def update_bode_labels(self, *args):
+        """Update the explanatory labels for Bode min/max frequencies."""
+        try:
+            min_n = int(self.min_freq_var.get())
+            max_n = int(self.max_freq_var.get())
+        except Exception:
+            return
+
+        def _format_freq(hz: float) -> str:
+            if hz >= 1e6:
+                return f"{hz / 1e6:.3g} MHz"
+            if hz >= 1e3:
+                return f"{hz / 1e3:.3g} kHz"
+            if hz >= 1:
+                return f"{hz:.3g} Hz"
+            return f"{hz:.3g} Hz"
+
+        min_hz = 10 ** min_n
+        max_hz = 10 ** max_n
+
+        if hasattr(self, "bode_min_label_var"):
+            self.bode_min_label_var.set(
+                f"Bode plot min frequency: {_format_freq(min_hz)}"
+            )
+        if hasattr(self, "bode_max_label_var"):
+            self.bode_max_label_var.set(
+                f"Bode plot max frequency: {_format_freq(max_hz)}"
+            )
+    
     
     def create_frequency_list(self, freq_type):
         """Create entry fields for frequencies (Zeros or Poles)"""
@@ -450,6 +526,7 @@ class FilterConfigGUI:
             
             if result.returncode == 0:
                 output_text.insert(tk.END, "\n=== Execution completed successfully ===\n")
+                    
             else:
                 output_text.insert(tk.END, f"\n=== Execution failed with return code {result.returncode} ===\n")
             
@@ -457,6 +534,7 @@ class FilterConfigGUI:
             
         except Exception as e:
             messagebox.showerror("Error", f"Failed to generate coefficients:\n{str(e)}")
+            
 
 
 def main(json_config_file = None):
