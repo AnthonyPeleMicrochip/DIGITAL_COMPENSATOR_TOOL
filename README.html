@@ -139,7 +139,7 @@
         </head>
         <body class="vscode-body vscode-light">
             <div>
-<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/mplab/DPSK4/training_code_on_DPSK4/updated/2_buck_vmc_v2.X - Q31 Vloop/buck_vmc_v2.X/Compensator_demo/_source_docs/microchip-logo2.png" width="200"/>
+<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/python/digital_power/Compensator/Digital_Compensator_Tool/_source_docs/microchip-logo2.png" width="200"/>
 </div>
 <style>
 r { color: Red }
@@ -151,7 +151,7 @@ g { color: Green }
 <h1 id="digital-compensator-tool-users-guide"><em>Digital Compensator Tool User's Guide</em></h1>
 <h2 id="summary"><em>Summary</em></h2>
 <p>This script converts analog (S-domain) compensator designs into discrete-time (Z-domain) IIR filters which can be used in dsPIC33 DSC Software.
-The tool takes compensator/filter configuration parameters from a <code>JSON</code> file (by default <code>filter_config.json</code>) which defines filter characteristics as <strong>Poles</strong> and <strong>Zeros</strong> frequencies.
+The tool takes compensator/filter configuration parameters from a <code>JSON</code> file (by default <code>./_config/filter_config.json</code>) which defines filter characteristics as <strong>Poles</strong> and <strong>Zeros</strong> frequencies.
 The tool generates and outputs (as per <em><strong>JSON</strong></em> file parameters)</p>
 <ol>
 <li>Bode plot of compensator transfer function:
@@ -178,13 +178,13 @@ To design several compensator instances, user can copy and paste entire folder t
 <pre><code class="language-bash">python -m pip install numpy scipy control matplotlib fxpmath
 </code></pre>
 <ol start="2">
-<li>Edit <code>filter_config.json</code> to define the compensator (example below) or create your own file. By default script launches <code>filter_config.json</code></li>
+<li>Edit <code>./_config/filter_config.json</code> to define the compensator (example below) or create your own file. By default script launches <code>./_config/filter_config.json</code></li>
 <li>Run the main script from the <code>Compensator</code> folder:
 <ul>
-<li>if no specific configuration file required (using <code>filter_config.json</code> by default), run following command in terminal session:<pre><code class="language-bash">python nPnZ_compensator.py
+<li>if no specific configuration file required (using <code>./_config/filter_config.json</code> by default), run following command in terminal session:<pre><code class="language-bash">python nPnZ_compensator.py
 </code></pre>
 </li>
-<li>if using specific configuration file such as <code>other_config_file.json</code>, run following command in terminal session:<pre><code class="language-bash">python nPnZ_compensator.py other_config_file.json
+<li>if using specific configuration file such as <code>./_config/other_config_file.json</code>, run following command in terminal session:<pre><code class="language-bash">python nPnZ_compensator.py ./_config/other_config_file.json
 </code></pre>
 </li>
 </ul>
@@ -217,6 +217,7 @@ To design several compensator instances, user can copy and paste entire folder t
 <li><code>&quot;h_file_name&quot;</code> is the name of output file used as C Code header that will be output in <code>/_output_docs/</code> sub-folder</li>
 <li><code>&quot;bode_plot_output_file_name&quot;</code> is the name of output pdf file for compensator bode plot stored in <code>/_output_docs/</code> sub-folder</li>
 <li><code>&quot;type&quot;</code> is telling 1P1Z, 2P2Z.... nPnZ type of filter. <em>Script does not use this paramater, this is information only.</em></li>
+<li><code>&quot;coefficient_format&quot;</code> is giving Text file (ASCII export from Mindi as an example) as data source to plot open loop response (plant + compensator). If this parameter is missing or empty, by default it only plots compensator.</li>
 <li>in <code>&quot;filter_parameters&quot;</code>, several settings are required.
 <ul>
 <li><code>&quot;BODE_PLOT_MIN_FREQ_10powerN&quot;</code> defines the power of <em><strong>10<sup>BODE_PLOT_MIN_FREQ_10powerN</sup></strong></em> (here in example <em><strong>10<sup>0</sup>=1Hz</strong></em> ) for start frequency of bode plots.</li>
@@ -242,16 +243,19 @@ As an example in default <code>JSON</code> file, <code>[{&quot;frequency&quot;: 
 <p>The script generates output files in <code>_output_docs/</code> subfolder.</p>
 <ul>
 <li>A PDF Bode plot comparing analog (S) and digital (Z) responses: <code>_output_docs/&lt;bode_plot_output_file_name&gt;</code> as set in <code>JSON</code> configuration file. PDF displays phase curves with and without <em><strong>estimated</strong></em> phase erosion.
-PDF file content example:</li>
+PDF file content example when there is no plant data:</li>
 </ul>
 <div>
-<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/mplab/DPSK4/training_code_on_DPSK4/updated/2_buck_vmc_v2.X - Q31 Vloop/buck_vmc_v2.X/Compensator_demo/_source_docs/DPSK4_BUCK_Q31_Compensator_Bode_Plot _example_pdf.png" width="700"/>
+<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/python/digital_power/Compensator/Digital_Compensator_Tool/_source_docs/DPSK4_BUCK_Q31_Compensator_Bode_Plot _example_pdf.png" width="700"/>
 </div>
-The phase erosion highly depends on definition of parameters passed in `JSON` file: 
-    ```json
-    "ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S": 700e-9,
-    "ESTIMATED_ADC_TRIGGER_POINT_DELAY": 1e-6,
-    ```
+<ul>
+<li>A PDF Bode plot as per above which includes open loop response with plant data when plant text file is present and put in <code>JSON</code> config file:</li>
+</ul>
+<div>
+<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/python/digital_power/Compensator/Digital_Compensator_Tool/_source_docs/DPSK4_BUCK_Q31_Compensator_Bode_Plot.png" width="700"/>
+</div>
+<p>The phase erosion highly depends on definition of parameters passed in <code>JSON</code> file:
+<code>json     &quot;ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S&quot;: 700e-9,     &quot;ESTIMATED_ADC_TRIGGER_POINT_DELAY&quot;: 1e-6,     </code></p>
 <ul>
 <li>
 <p>A C header file with coefficient macros (FLOAT, Q31, Q15): <code>_output_docs/&lt;h_file_name&gt;</code>. Example:</p>
@@ -352,7 +356,7 @@ s</p>
 <h2 id="license"><em>License</em></h2>
 <p>This tool is provided for use within Microchip Technology Inc. projects. Refer to your organization's software licensing policy for usage terms.</p>
 <div>
-<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/mplab/DPSK4/training_code_on_DPSK4/updated/2_buck_vmc_v2.X - Q31 Vloop/buck_vmc_v2.X/Compensator_demo/_source_docs/microchip-logo2.png" width="200"/>
+<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/python/digital_power/Compensator/Digital_Compensator_Tool/_source_docs/microchip-logo2.png" width="200"/>
 </div>
 
             

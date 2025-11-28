@@ -17,7 +17,7 @@ g { color: Green }
 
 ## *Summary*
 This script converts analog (S-domain) compensator designs into discrete-time (Z-domain) IIR filters which can be used in dsPIC33 DSC Software.
-The tool takes compensator/filter configuration parameters from a `JSON` file (by default `filter_config.json`) which defines filter characteristics as **Poles** and **Zeros** frequencies.
+The tool takes compensator/filter configuration parameters from a `JSON` file (by default `./_config/filter_config.json`) which defines filter characteristics as **Poles** and **Zeros** frequencies.
 The tool generates and outputs (as per ***JSON*** file parameters)
 1. Bode plot of compensator transfer function:
     - In Analog domain
@@ -36,15 +36,15 @@ To design several compensator instances, user can copy and paste entire folder t
 ```bash
 python -m pip install numpy scipy control matplotlib fxpmath
 ```
-2. Edit `filter_config.json` to define the compensator (example below) or create your own file. By default script launches `filter_config.json`
+2. Edit `./_config/filter_config.json` to define the compensator (example below) or create your own file. By default script launches `./_config/filter_config.json`
 3. Run the main script from the `Compensator` folder:
-    - if no specific configuration file required (using `filter_config.json` by default), run following command in terminal session:
+    - if no specific configuration file required (using `./_config/filter_config.json` by default), run following command in terminal session:
         ```bash
         python nPnZ_compensator.py
         ```
-    - if using specific configuration file such as `other_config_file.json`, run following command in terminal session:
+    - if using specific configuration file such as `./_config/other_config_file.json`, run following command in terminal session:
         ```bash
-        python nPnZ_compensator.py other_config_file.json
+        python nPnZ_compensator.py ./_config/other_config_file.json
         ```
 ## *Config File Content*
 Below is an example:
@@ -73,6 +73,7 @@ Where:
 - `"h_file_name"` is the name of output file used as C Code header that will be output in `/_output_docs/` sub-folder
 - `"bode_plot_output_file_name"` is the name of output pdf file for compensator bode plot stored in `/_output_docs/` sub-folder
 - `"type"` is telling 1P1Z, 2P2Z.... nPnZ type of filter. *Script does not use this paramater, this is information only.*
+- `"coefficient_format"` is giving Text file (ASCII export from Mindi as an example) as data source to plot open loop response (plant + compensator). If this parameter is missing or empty, by default it only plots compensator.
 - in `"filter_parameters"`, several settings are required.
     - `"BODE_PLOT_MIN_FREQ_10powerN"` defines the power of ***10<sup>BODE_PLOT_MIN_FREQ_10powerN</sup>*** (here in example ***10<sup>0</sup>=1Hz*** ) for start frequency of bode plots.
     - `"BODE_PLOT_MAX_FREQ_10powerN"` defines the power of ***10<sup>BODE_PLOT_MAX_FREQ_10powerN</sup>*** (here in example ***10<sup>6</sup>=1MHz*** ) for stop frequency of bode plots. Generally taking upper bound or sampling frequency.
@@ -90,11 +91,17 @@ Where:
 
 ## *Output File Content*
 The script generates output files in `_output_docs/` subfolder.
-- A PDF Bode plot comparing analog (S) and digital (Z) responses: `_output_docs/<bode_plot_output_file_name>` as set in `JSON` configuration file. PDF displays phase curves with and without ***estimated*** phase erosion.
-PDF file content example:
+  - A PDF Bode plot comparing analog (S) and digital (Z) responses: `_output_docs/<bode_plot_output_file_name>` as set in `JSON` configuration file. PDF displays phase curves with and without ***estimated*** phase erosion.
+PDF file content example when there is no plant data:
 <div>
 <img src="./_source_docs/DPSK4_BUCK_Q31_Compensator_Bode_Plot _example_pdf.png" width="700"/>
 </div>
+
+   - A PDF Bode plot as per above which includes open loop response with plant data when plant text file is present and put in `JSON` config file:
+<div>
+<img src="./_source_docs/DPSK4_BUCK_Q31_Compensator_Bode_Plot.png" width="700"/>
+</div>
+
 The phase erosion highly depends on definition of parameters passed in `JSON` file: 
     ```json
     "ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S": 700e-9,

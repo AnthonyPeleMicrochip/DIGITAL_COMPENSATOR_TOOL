@@ -36,7 +36,7 @@ The Filter Configuration Generator GUI is a Python-based graphical user interfac
    ```
    or run the GUI with a custom configuration file as parameter to load default configuration from an existing file:
    ```bash
-   python filter_config_gui.py ilter_config_DPSK4_BUCK_Q31.json
+   python filter_config_gui.py ./_config/filter_config_DPSK4_BUCK_Q31.json
    ```
 
 ## *User Interface Layout*
@@ -185,6 +185,7 @@ Performs the following actions:
         "ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S": 7e-07,
         "ESTIMATED_ADC_TRIGGER_POINT_DELAY": 1e-06,
         "coefficient_format": "float",
+        "plant_data_file": "PLANT.txt",
         "frequencies_Hz": {
             "Integrator_pole": [
                 {

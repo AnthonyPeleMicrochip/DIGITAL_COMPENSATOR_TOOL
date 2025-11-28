@@ -33,6 +33,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import json
 import Qn_Fractional_lib as Qn
+import get_plant_from_txt as plant
 
 
 """        
@@ -235,7 +236,7 @@ def compensator_setup (json_config_file, verbose = False):
 * MAIN
 **************************************************************************************************************************************
 """
-def main(json_config_file = "./filter_config.json" , verbose = True):
+def main(json_config_file = "./_config/filter_config.json" , verbose = True):
     # Taking filter configuration from "filter_config.json" file by default when script is called directly
     with open(json_config_file, "r") as f:
         data_from_json = json.load(f)
@@ -387,43 +388,95 @@ def main(json_config_file = "./filter_config.json" , verbose = True):
 
     
     """ BODE PLOTS """
-    CompPlt, axs = plt.subplots(2,1, figsize=(10, 8))
+    try:
+        plant_data_file = data_from_json["plant_data_file"]
+        CompPlt, axs = plt.subplots(2,2, figsize=(13, 8))
+        CompGainPlt =axs[0,0]
+        CompPhasePlt = axs[1,0]
+        PlantGainPlt = axs[0,1]
+        PlantPhasePlt = axs[1,1]
+        plant_data_file_found = True
+    except: 
+        CompPlt, axs = plt.subplots(2,1, figsize=(10, 8))
+        CompGainPlt = axs[0]
+        CompPhasePlt = axs[1]
+        plant_data_file_found = False
+        
     CompPlt.suptitle(Compensator.name.upper())
-    axs[0].semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.mag_z, label="Digital", dashes=[6, 2])   # Bode magnitude plot of Digital Filter (contructed from Analog through bilinear transform)
-    axs[0].semilogx(Compensator.bode_data.f_s, Compensator.bode_data.mag_s, label="Analog")       # Bode magnitude plot of Analog Filte
+    CompGainPlt.semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.mag_z, label="Digital", dashes=[6, 2])   # Bode magnitude plot of Digital Filter (contructed from Analog through bilinear transform)
+    CompGainPlt.semilogx(Compensator.bode_data.f_s, Compensator.bode_data.mag_s, label="Analog")       # Bode magnitude plot of Analog Filte
     plot_max = np.round(np.max(Compensator.bode_data.mag_s),-1) + 10    # Search for max gain value and round to upper 10's value + 10dB
     plot_min = np.round(np.min(Compensator.bode_data.mag_s),-1) - 10    # Search for min gain value and round to lower 10's value - 10dB
-    axs[0].set_ylim(plot_min,plot_max)
-    axs[0].set_ylabel("Gain [dB]")
-    axs[0].set_xlabel("Frequency [Hz]")
-    axs[0].grid(True, which="both")
-    axs[0].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
-    axs[0].axvline(x=FP0_FREQ, color='k', linestyle='solid', linewidth=2, label=("fP0 @ " + str(FP0_FREQ) + " Hz"))
+    CompGainPlt.set_ylim(plot_min,plot_max)
+    CompGainPlt.set_ylabel("Gain [dB]")
+    CompGainPlt.set_xlabel("Frequency [Hz]")
+    CompGainPlt.grid(True, which="both")
+    CompGainPlt.axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
+    CompGainPlt.axvline(x=FP0_FREQ, color='k', linestyle='solid', linewidth=2, label=("fP0 @ " + str(FP0_FREQ) + " Hz"))
     for zero in Zeros:
-        axs[0].axvline(x=zero.freq, color='k', linestyle='dashed', linewidth=2, label=("fZ @ " + str(zero.freq) + " Hz"))
+        CompGainPlt.axvline(x=zero.freq, color='k', linestyle='dashed', linewidth=2, label=("fZ @ " + str(zero.freq) + " Hz"))
     for pole in Poles:
-        axs[0].axvline(x=pole.freq, color='k', linestyle='dotted', linewidth=2, label=("fP @ " + str(pole.freq) + " Hz"))
-    axs[0].legend(loc='best', fontsize='small')
+        CompGainPlt.axvline(x=pole.freq, color='k', linestyle='dotted', linewidth=2, label=("fP @ " + str(pole.freq) + " Hz"))
+    CompGainPlt.legend(loc='best', fontsize='small')
 
-    axs[1].semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.phase_z_with_erosion, label="Digital with erosion", dashes=[6, 2])   # Bode phase plot of Digital Filter (contructed from Analog through bilinear transform)
-    axs[1].semilogx(Compensator.bode_data.f_s, Compensator.bode_data.phase_s_with_erosion, label="Analog with erosion")       # Bode phase plot of    Analog Filter
-    axs[1].set_ylabel("Phase [°]")
-    axs[1].set_xlabel("Frequency [Hz]")
-    axs[1].grid(True, which="both")
+    CompPhasePlt.semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.phase_z_with_erosion, label="Digital with erosion", dashes=[6, 2])   # Bode phase plot of Digital Filter (contructed from Analog through bilinear transform)
+    CompPhasePlt.semilogx(Compensator.bode_data.f_s, Compensator.bode_data.phase_s_with_erosion, label="Analog with erosion")       # Bode phase plot of    Analog Filter
+    CompPhasePlt.set_ylabel("Phase [°]")
+    CompPhasePlt.set_xlabel("Frequency [Hz]")
+    CompPhasePlt.grid(True, which="both")
     
-    axs[1].semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.phase_z, label="Digital", dashes=[6, 2])   # Bode phase plot of Digital Filter (contructed from Analog through bilinear transform)
-    axs[1].semilogx(Compensator.bode_data.f_s, Compensator.bode_data.phase_s, label="Analog")       # Bode phase plot of    Analog Filter
-    axs[1].set_ylabel("Phase [°]")
-    axs[1].set_xlabel("Frequency [Hz]")
-    axs[1].grid(True, which="both")
-    axs[1].axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
-    axs[1].axvline(x=FP0_FREQ, color='k', linestyle='solid', linewidth=2, label=("fP0 @ " + str(FP0_FREQ) + " Hz"))
+    CompPhasePlt.semilogx(Compensator.bode_data.f_z*Fs, Compensator.bode_data.phase_z, label="Digital", dashes=[6, 2])   # Bode phase plot of Digital Filter (contructed from Analog through bilinear transform)
+    CompPhasePlt.semilogx(Compensator.bode_data.f_s, Compensator.bode_data.phase_s, label="Analog")       # Bode phase plot of    Analog Filter
+    CompPhasePlt.set_ylabel("Phase [°]")
+    CompPhasePlt.set_xlabel("Frequency [Hz]")
+    CompPhasePlt.grid(True, which="both")
+    CompPhasePlt.axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
+    CompPhasePlt.axvline(x=FP0_FREQ, color='k', linestyle='solid', linewidth=2, label=("fP0 @ " + str(FP0_FREQ) + " Hz"))
     for zero in Zeros:
-        axs[1].axvline(x=zero.freq, color='k', linestyle='dashed', linewidth=2, label=("fZ @ " + str(zero.freq) + " Hz"))
+        CompPhasePlt.axvline(x=zero.freq, color='k', linestyle='dashed', linewidth=2, label=("fZ @ " + str(zero.freq) + " Hz"))
     for pole in Poles:
-        axs[1].axvline(x=pole.freq, color='k', linestyle='dotted', linewidth=2, label=("fP @ " + str(pole.freq) + " Hz"))
-    axs[1].legend(loc='upper left', fontsize='small')
-
+        CompPhasePlt.axvline(x=pole.freq, color='k', linestyle='dotted', linewidth=2, label=("fP @ " + str(pole.freq) + " Hz"))
+    CompPhasePlt.legend(loc='upper left', fontsize='small')
+    CompPhasePlt.set_ylim(-180, 181)
+    CompPhasePlt.set_yticks(np.arange(-180, 181, 20))
+    
+    #Plant data graph
+    if plant_data_file_found == True:
+        plant_data_file = data_from_json["plant_data_file"]
+        flag_return, Plant_RAW = plant.main(plant_data_file)
+        Plant_RAW = np.array(Plant_RAW)
+        #print(Plant_RAW)
+        print(len(Compensator.bode_data.f_s))
+        Plant = plant.reshape_plant_data(Plant_RAW, Compensator.bode_data.f_s)
+        plant_bode = BODE_DATA(w_vector, Fs)
+        index = 0
+        for data_point in Plant:
+            plant_bode.f_s[index] = data_point[0]
+            plant_bode.mag_s[index] = data_point[1]
+            plant_bode.phase_s[index] = data_point[2]
+            index += 1
+        PlantGainPlt.semilogx(plant_bode.f_s, plant_bode.mag_s, label="Plant", dashes=[6, 2])       # Bode magnitude plot of Plant
+        PlantGainPlt.semilogx(plant_bode.f_s, plant_bode.mag_s + Compensator.bode_data.mag_z, label="Plant + Comp")       # Bode magnitude plot of Plant
+        PlantGainPlt.set_ylabel("Gain [dB]")
+        PlantGainPlt.set_xlabel("Frequency [Hz]")
+        PlantGainPlt.grid(True, which="both")
+        PlantGainPlt.axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
+        PlantGainPlt.legend(loc='best', fontsize='small')
+        PlantGainPlt.set_ylim(-80, 60)
+        PlantGainPlt.set_yticks(np.arange(-80, 61, 10))
+        PlantGainPlt.axhline(y=0, color='k', linewidth=2)
+        
+        PlantPhasePlt.semilogx(plant_bode.f_s, -180 + plant_bode.phase_s, label="Plant", dashes=[6, 2])       # Bode magnitude plot of Plant
+        PlantPhasePlt.semilogx(plant_bode.f_s, -180 + plant_bode.phase_s + Compensator.bode_data.phase_z, label="Plant + Comp")       # Bode magnitude plot of Plant
+        PlantPhasePlt.set_ylabel("Phase [°]")
+        PlantPhasePlt.set_xlabel("Frequency [Hz]")
+        PlantPhasePlt.grid(True, which="both")
+        PlantPhasePlt.axvline(x=Fs/2, color='r', linestyle='dotted', linewidth=3, label=("Fs/2 limit @ " + str((Fs/2)/1000) + " kHz"))
+        PlantPhasePlt.legend(loc='best', fontsize='small')
+        PlantPhasePlt.set_ylim(-270, 30)
+        PlantPhasePlt.set_yticks(np.arange(-180, 1, 20))
+        PlantPhasePlt.axhline(y=-180, color='k', linewidth=2)
+        
     plt.show()
     CompPlt.savefig(bode_plot_output, format='pdf')
 
