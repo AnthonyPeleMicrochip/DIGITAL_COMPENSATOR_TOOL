@@ -1,0 +1,37 @@
+{
+    "name": "dpsk4_buck_q31_1P1Z_vcomp",
+    "h_file_name": "DPSK4_BUCK_q31_1P1Z__Compensator.h",
+    "bode_plot_output_file_name": "DPSK4_BUCK_q31_1P1Z_Compensator_Bode_Plot.pdf",
+    "type": "1P1Z",
+    "version": "1.0.0",
+    "description": "1P1Z Buck Voltage Compensator for DPSK4, for Q31 format",
+    "author": "Anthony PELE - M24683",
+    "company": "Microchip Technology Inc.",
+    "date": "2025-11-19",
+    "filter_parameters": 
+    {
+        "BODE_PLOT_MIN_FREQ_10powerN": 0,
+        "BODE_PLOT_MAX_FREQ_10powerN": 6,
+        "BODE_PLOT_NB_POINTS": 1000,
+        "SAMPLING_FREQUENCY_HZ": 500e3,
+        "ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S": 700e-9,
+        "ESTIMATED_ADC_TRIGGER_POINT_DELAY": 1e-6,
+        "coefficient_format": "Q31",
+        "frequencies_Hz":
+        {
+            "Integrator_pole":
+            [
+                {
+                    "frequency": 45,
+                    "type": "Integrator"
+                }
+            ],
+            "Zeros":
+            [           
+            ],
+            "Poles":
+            [
+            ]
+        }
+    }
+}

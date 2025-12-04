@@ -21,6 +21,7 @@ class FilterConfigGUI:
         self.root.geometry("1200x800")
         
         if default_file is None:
+            self.default_config_file = ""
             # Initialize default configuration
             self.config = {
                 "name": "Name_your_filter_here",
@@ -40,6 +41,7 @@ class FilterConfigGUI:
                     "ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S": 700e-9,
                     "ESTIMATED_ADC_TRIGGER_POINT_DELAY": 1e-6,
                     "coefficient_format": "float",
+                    "plant_data_file": "",
                     "frequencies_Hz": {
                         "Integrator_pole": [
                             {"frequency": 1200, "type": "Integrator"}
@@ -57,6 +59,7 @@ class FilterConfigGUI:
             }
         else:
             # Load configuration from provided JSON file
+            self.default_config_file = default_file
             with open(default_file, 'r') as f:
                 self.config = json.load(f)       
         
@@ -374,6 +377,7 @@ class FilterConfigGUI:
         for frame, var in self.pole_entries:
             poles.append({"frequency": var.get(), "type": "Pole"})
         
+        # Build full configuration dictionary
         config = {
             "name": self.name_var.get(),
             "h_file_name": self.h_file_var.get(),
@@ -384,6 +388,7 @@ class FilterConfigGUI:
             "author": self.author_var.get(),
             "company": "Microchip Technology Inc.",
             "date": str(date.today()),
+            "plant_data_file": self.config.get("plant_data_file", ""),
             "filter_parameters": {
                 "BODE_PLOT_MIN_FREQ_10powerN": self.min_freq_var.get(),
                 "BODE_PLOT_MAX_FREQ_10powerN": self.max_freq_var.get(),
@@ -478,6 +483,7 @@ class FilterConfigGUI:
     def run_compensator(self):
         """Run the nPnZ_compensator.py script"""
         try:
+            print("FLAG")
             # First, save the current config to JSON file using filter name
             config = self.collect_config()
             
@@ -491,6 +497,7 @@ class FilterConfigGUI:
             
             with open(config_filepath, 'w') as f:
                 json.dump(config, f, indent=4)
+            print(os.path.abspath(config_filepath))
             
             # Check if nPnZ_compensator.py exists
             compensator_script = os.path.join(script_dir, "nPnZ_compensator.py")

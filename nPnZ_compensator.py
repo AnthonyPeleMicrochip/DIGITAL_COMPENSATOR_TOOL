@@ -389,6 +389,11 @@ def main(json_config_file = "./_config/filter_config.json" , verbose = True):
     
     """ BODE PLOTS """
     try:
+        if data_from_json["plant_data_file"] == "":
+            raise Exception("No plant data file specified")
+        if not os.path.isfile(data_from_json["plant_data_file"]):
+            print(os.path)
+            raise Exception("Plant data file not found")
         plant_data_file = data_from_json["plant_data_file"]
         CompPlt, axs = plt.subplots(2,2, figsize=(13, 8))
         CompGainPlt =axs[0,0]
@@ -441,6 +446,7 @@ def main(json_config_file = "./_config/filter_config.json" , verbose = True):
     CompPhasePlt.set_yticks(np.arange(-180, 181, 20))
     
     #Plant data graph
+    print(plant_data_file_found)
     if plant_data_file_found == True:
         plant_data_file = data_from_json["plant_data_file"]
         flag_return, Plant_RAW = plant.main(plant_data_file)
