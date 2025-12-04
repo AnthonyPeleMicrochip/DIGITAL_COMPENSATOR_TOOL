@@ -185,7 +185,7 @@ Performs the following actions:
         "ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S": 7e-07,
         "ESTIMATED_ADC_TRIGGER_POINT_DELAY": 1e-06,
         "coefficient_format": "float",
-        "plant_data_file": "PLANT.txt",
+        "plant_data_file": "",
         "frequencies_Hz": {
             "Integrator_pole": [
                 {
