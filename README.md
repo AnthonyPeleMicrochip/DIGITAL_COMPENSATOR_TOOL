@@ -62,6 +62,7 @@ Below is an example:
   "name": "dpsk4_vcomp",
   "h_file_name": "DPSK4_BUCK_Float_Compensator.h",
   "bode_plot_output_file_name": "DPSK4_BUCK_Float_Compensator_Bode_Plot.pdf",
+  "h_file_output_folder": "./_output_docs",
   "type": "3P3Z",
   "filter_parameters": {
     "BODE_PLOT_MIN_FREQ_10powerN": 0,
@@ -83,6 +84,7 @@ Where:
 - `"name"` is compensator name that will be used by script in generated files content to label things.
 - `"h_file_name"` is the name of output file used as C Code header that will be output in `/_output_docs/` sub-folder
 - `"bode_plot_output_file_name"` is the name of output pdf file for compensator bode plot stored in `/_output_docs/` sub-folder
+- `"h_file_output_folder"` is the destination folder for the generated C header file. Defaults to `./_output_docs` if not specified. Bode plot PDF output is not affected by this setting.
 - `"type"` is telling 1P1Z, 2P2Z.... nPnZ type of filter. *Script does not use this paramater, this is information only.*
 - `"coefficient_format"` is giving Text file (ASCII export from Mindi as an example) as data source to plot open loop response (plant + compensator). If this parameter is missing or empty, by default it only plots compensator.
 - in `"filter_parameters"`, several settings are required.
@@ -212,6 +214,10 @@ s
 ```
 
 ## *Version History*
+
+- **v2.2** (2026-10-14): New features
+  - Added configurable `h_file_output_folder` JSON config field to specify destination folder for generated C header files (defaults to `./_output_docs`)
+  - Added original coefficient values and quantization error % in Q31/Q15 header file comments
 
 - **v2.0** (2026-10-14): Bug fixes
   - Fixed missing parentheses on `Harmonize_DSP_Coefficients_Scaling_Q31()` and `_Q15()` method calls (were no-ops)

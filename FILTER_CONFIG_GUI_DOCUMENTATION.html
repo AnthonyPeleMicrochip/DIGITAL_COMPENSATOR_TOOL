@@ -205,6 +205,14 @@ or run the GUI with a custom configuration file as parameter to load default con
 </ul>
 </li>
 <li>
+<p><strong>Header .h File Output Folder</strong>: Destination folder for the generated C header file</p>
+<ul>
+<li>Editable text field with a &quot;Browse...&quot; button to select a folder</li>
+<li>Stores a relative path from the script directory</li>
+<li>Default: <code>./_output_docs</code></li>
+</ul>
+</li>
+<li>
 <p><strong>Filter Type</strong>: Dropdown selection for filter topology</p>
 <ul>
 <li>Options: 1P1Z, 2P2Z, 3P3Z, 4P4Z, 5P5Z, 6P6Z</li>
@@ -346,6 +354,12 @@ or run the GUI with a custom configuration file as parameter to load default con
 <li>Loads all parameters from the selected file into the GUI</li>
 <li>Validates JSON structure before loading</li>
 </ul>
+<h3 id="-save-configuration">&#128190; Save Configuration</h3>
+<ul>
+<li>Opens a file dialog to choose where to save the current configuration as a JSON file</li>
+<li>Default directory: Same folder as the Python script</li>
+<li>If the dialog is cancelled, the configuration is saved as <code>&lt;filter_name&gt;.json</code> in the script directory</li>
+</ul>
 <h3 id="-generate-coefficients">&#9881;&#65039; Generate Coefficients</h3>
 <p>Performs the following actions:</p>
 <ol>
@@ -369,6 +383,7 @@ or run the GUI with a custom configuration file as parameter to load default con
     <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;filter_name&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;h_file_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Filter_Name.h&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;bode_plot_output_file_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Filter_Name_Bode_Plot.pdf&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;h_file_output_folder&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./_output_docs&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3P3Z&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1.0.0&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Description of the filter&quot;</span><span class="hljs-punctuation">,</span>
@@ -554,6 +569,14 @@ base_config = {
 <p>For issues with the <code>nPnZ_compensator.py</code> script, refer to its separate documentation.</p>
 <h2 id="version-history"><em>Version History</em></h2>
 <ul>
+<li><strong>v2.2</strong> (2026-10-14): New features
+<ul>
+<li>Added &quot;Save Configuration&quot; button to save the current configuration to a new JSON file</li>
+<li>Added configurable &quot;Header .h File Output Folder&quot; field with Browse button</li>
+<li>Added <code>h_file_output_folder</code> JSON config field (defaults to <code>./_output_docs</code>)</li>
+<li>Added original coefficient values and quantization error % in Q31/Q15 header file comments</li>
+</ul>
+</li>
 <li><strong>v2.0</strong> (2026-10-14): Bug fixes and improvements
 <ul>
 <li><strong>Bug fixes (nPnZ_compensator.py):</strong>

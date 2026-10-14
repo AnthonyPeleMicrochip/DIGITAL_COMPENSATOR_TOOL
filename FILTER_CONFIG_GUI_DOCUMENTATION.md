@@ -67,6 +67,11 @@ Contains metadata and identification fields for the filter:
   - Auto-generated from Filter Name but remains editable
   - Format: PascalCase with underscores + `_Bode_Plot.pdf`
   - Example: `Dpsk4_Buck_Float_Vcomp_Bode_Plot.pdf`
+- **Header .h File Output Folder**: Destination folder for the generated C header file
+
+  - Editable text field with a "Browse..." button to select a folder
+  - Stores a relative path from the script directory
+  - Default: `./_output_docs`
 - **Filter Type**: Dropdown selection for filter topology
 
   - Options: 1P1Z, 2P2Z, 3P3Z, 4P4Z, 5P5Z, 6P6Z
@@ -171,6 +176,12 @@ Defines the pole and zero locations for the filter transfer function:
 - Loads all parameters from the selected file into the GUI
 - Validates JSON structure before loading
 
+### 💾 Save Configuration
+
+- Opens a file dialog to choose where to save the current configuration as a JSON file
+- Default directory: Same folder as the Python script
+- If the dialog is cancelled, the configuration is saved as `<filter_name>.json` in the script directory
+
 ### ⚙️ Generate Coefficients
 
 Performs the following actions:
@@ -195,6 +206,7 @@ Performs the following actions:
     "name": "filter_name",
     "h_file_name": "Filter_Name.h",
     "bode_plot_output_file_name": "Filter_Name_Bode_Plot.pdf",
+    "h_file_output_folder": "./_output_docs",
     "type": "3P3Z",
     "version": "1.0.0",
     "description": "Description of the filter",
@@ -365,6 +377,12 @@ For issues, questions, or feature requests related to the GUI, please contact yo
 For issues with the `nPnZ_compensator.py` script, refer to its separate documentation.
 
 ## *Version History*
+
+- **v2.2** (2026-10-14): New features
+  - Added "Save Configuration" button to save the current configuration to a new JSON file
+  - Added configurable "Header .h File Output Folder" field with Browse button
+  - Added `h_file_output_folder` JSON config field (defaults to `./_output_docs`)
+  - Added original coefficient values and quantization error % in Q31/Q15 header file comments
 
 - **v2.0** (2026-10-14): Bug fixes and improvements
   - **Bug fixes (nPnZ_compensator.py):**
