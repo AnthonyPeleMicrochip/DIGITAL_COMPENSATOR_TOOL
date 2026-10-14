@@ -2,6 +2,7 @@
     "name": "dpsk4_buck_Q15_vcomp",
     "h_file_name": "Dpsk4_Buck_Q15_Vcomp.h",
     "bode_plot_output_file_name": "Dpsk4_Buck_Q15_Vcomp_Bode_Plot.pdf",
+    "h_file_output_folder": "./_output_docs",
     "type": "3P3Z",
     "version": "1.0.0",
     "description": "3P3Z Buck Voltage Compensator for DPSK3, for Q31 Fixed point format",

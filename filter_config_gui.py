@@ -26,6 +26,7 @@ class FilterConfigGUI:
                 "name": "Name_your_filter_here",
                 "h_file_name": "your_filter_C_code_header_file_name_here.h",
                 "bode_plot_output_file_name": "your_filter_BODE_Plot_file_name_here.pdf",
+                "h_file_output_folder": "./_output_docs",
                 "type": "3P3Z",
                 "version": "1.0.0",
                 "description": "Your compesator description here.",
@@ -115,7 +116,16 @@ class FilterConfigGUI:
         ttk.Label(gen_frame, text="Bode Plot pdf file name (Generated):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.bode_var = tk.StringVar(value=self.config["bode_plot_output_file_name"])
         ttk.Entry(gen_frame, textvariable=self.bode_var, width=40).grid(row=row_number, column=1, pady=5, padx=5)
-        
+
+        # Output Folder
+        row_number += 1
+        ttk.Label(gen_frame, text="Header .h File Output Folder:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
+        output_folder_frame = ttk.Frame(gen_frame)
+        output_folder_frame.grid(row=row_number, column=1, pady=5, padx=5, sticky=tk.W)
+        self.output_folder_var = tk.StringVar(value=self.config.get("h_file_output_folder", "./_output_docs"))
+        ttk.Entry(output_folder_frame, textvariable=self.output_folder_var, width=30).grid(row=0, column=0)
+        ttk.Button(output_folder_frame, text="Browse...", command=self.browse_output_folder, width=10).grid(row=0, column=1, padx=(5, 0))
+
         # Filter Type
         row_number += 1
         ttk.Label(gen_frame, text="Filter Type:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
@@ -272,6 +282,19 @@ class FilterConfigGUI:
         if filename:
             self.plant_file_var.set(filename)
 
+    def browse_output_folder(self):
+        """Open dialog to select the output folder for generated files."""
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        current = self.output_folder_var.get().strip()
+        if current:
+            initial = os.path.join(script_dir, current)
+        else:
+            initial = script_dir
+        folder = filedialog.askdirectory(initialdir=initial, title="Select Output Folder")
+        if folder:
+            rel = os.path.relpath(folder, script_dir).replace("\\", "/")
+            self.output_folder_var.set("./" + rel)
+
     def update_auto_filenames(self, *args):
         """Auto-generate H file name and Bode plot filename from filter name"""
         name = self.name_var.get()
@@ -399,6 +422,7 @@ class FilterConfigGUI:
             "name": self.name_var.get(),
             "h_file_name": self.h_file_var.get(),
             "bode_plot_output_file_name": self.bode_var.get(),
+            "h_file_output_folder": self.output_folder_var.get(),
             "type": self.type_var.get(),
             "version": "1.0.0",
             "description": self.desc_text.get("1.0", tk.END).strip(),
@@ -484,6 +508,7 @@ class FilterConfigGUI:
         self.name_var.set(self.config["name"])
         self.h_file_var.set(self.config["h_file_name"])
         self.bode_var.set(self.config["bode_plot_output_file_name"])
+        self.output_folder_var.set(self.config.get("h_file_output_folder", "./_output_docs"))
         self.type_var.set(self.config["type"])
         self.author_var.set(self.config["author"])
         self.desc_text.delete("1.0", tk.END)

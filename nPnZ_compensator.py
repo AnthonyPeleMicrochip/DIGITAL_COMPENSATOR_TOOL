@@ -257,7 +257,8 @@ def main(json_config_file = "./_config/filter_config.json" , verbose = True):
     # Sampling frequency in Hertz (Hz)
     Fs=SamplingFreq
     Ts=1/SamplingFreq
-    header_file_name = "./_output_docs/" + data_from_json["h_file_name"]
+    h_file_output_folder = data_from_json.get("h_file_output_folder", "./_output_docs")
+    header_file_name = h_file_output_folder + "/" + data_from_json["h_file_name"]
     bode_plot_output = "./_output_docs/" + data_from_json["bode_plot_output_file_name"]
     # Retrieve parameters from JSON file to estimate phase erosion impact
     ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S = data_from_json["filter_parameters"]["ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S"]

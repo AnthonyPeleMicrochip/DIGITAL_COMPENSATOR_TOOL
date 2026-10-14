@@ -2,6 +2,7 @@
     "name": "dpsk4_buck_3P3Z_Q31_GUI",
     "h_file_name": "Dpsk4_Buck_3p3z_Q31_Gui.h",
     "bode_plot_output_file_name": "Dpsk4_Buck_3p3z_Q31_Gui_Bode_Plot.pdf",
+    "h_file_output_folder": "./_output_docs",
     "type": "3P3Z",
     "version": "1.0.0",
     "description": "3P3Z Buck Voltage Compensator for DPSK4, for floating point format",
