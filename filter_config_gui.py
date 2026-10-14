@@ -21,7 +21,6 @@ class FilterConfigGUI:
         self.root.geometry("1200x800")
         
         if default_file is None:
-            self.default_config_file = ""
             # Initialize default configuration
             self.config = {
                 "name": "Name_your_filter_here",
@@ -41,7 +40,6 @@ class FilterConfigGUI:
                     "ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S": 700e-9,
                     "ESTIMATED_ADC_TRIGGER_POINT_DELAY": 1e-6,
                     "coefficient_format": "float",
-                    "plant_data_file": "",
                     "frequencies_Hz": {
                         "Integrator_pole": [
                             {"frequency": 1200, "type": "Integrator"}
@@ -59,7 +57,6 @@ class FilterConfigGUI:
             }
         else:
             # Load configuration from provided JSON file
-            self.default_config_file = default_file
             with open(default_file, 'r') as f:
                 self.config = json.load(f)       
         
@@ -209,10 +206,19 @@ class FilterConfigGUI:
         row_number += 1
         ttk.Label(param_frame, text="Coefficient Format:").grid(row=row_number, column=0, sticky=tk.W, pady=5)
         self.coef_format_var = tk.StringVar(value=self.config["filter_parameters"]["coefficient_format"])
-        coef_combo = ttk.Combobox(param_frame, textvariable=self.coef_format_var, 
+        coef_combo = ttk.Combobox(param_frame, textvariable=self.coef_format_var,
                                    values=["float", "Q15", "Q31"],
                                    state="readonly", width=27)
         coef_combo.grid(row=row_number, column=1, pady=5, padx=5)
+
+        # Plant Data File (optional)
+        row_number += 1
+        ttk.Label(param_frame, text="Plant Data File (optional):").grid(row=row_number, column=0, sticky=tk.W, pady=5)
+        plant_file_frame = ttk.Frame(param_frame)
+        plant_file_frame.grid(row=row_number, column=1, pady=5, padx=5, sticky=tk.W)
+        self.plant_file_var = tk.StringVar(value=self.config.get("plant_data_file", ""))
+        ttk.Entry(plant_file_frame, textvariable=self.plant_file_var, width=20).grid(row=0, column=0)
+        ttk.Button(plant_file_frame, text="Browse...", command=self.browse_plant_file).grid(row=0, column=1, padx=(5, 0))
         
         # ===== FREQUENCIES SECTION =====
         freq_frame = ttk.LabelFrame(scrollable_frame, text="Frequencies Configuration", padding="10")
@@ -254,6 +260,17 @@ class FilterConfigGUI:
         ttk.Button(button_frame, text="📂 Load JSON", command=self.load_json, width=20).grid(row=0, column=0, padx=5)
         ttk.Button(button_frame, text="⚙️ Generate Coefficients", command=self.run_compensator, width=25).grid(row=0, column=1, padx=5)
     
+    def browse_plant_file(self):
+        """Open file dialog to select a plant data text file."""
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        filename = filedialog.askopenfilename(
+            initialdir=script_dir,
+            title="Select Plant Data File",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+        )
+        if filename:
+            self.plant_file_var.set(filename)
+
     def update_auto_filenames(self, *args):
         """Auto-generate H file name and Bode plot filename from filter name"""
         name = self.name_var.get()
@@ -377,7 +394,6 @@ class FilterConfigGUI:
         for frame, var in self.pole_entries:
             poles.append({"frequency": var.get(), "type": "Pole"})
         
-        # Build full configuration dictionary
         config = {
             "name": self.name_var.get(),
             "h_file_name": self.h_file_var.get(),
@@ -388,8 +404,11 @@ class FilterConfigGUI:
             "author": self.author_var.get(),
             "company": "Microchip Technology Inc.",
             "date": str(date.today()),
-            "plant_data_file": self.config.get("plant_data_file", ""),
-            "filter_parameters": {
+        }
+        plant_file = self.plant_file_var.get().strip()
+        if plant_file:
+            config["plant_data_file"] = plant_file
+        config["filter_parameters"] = {
                 "BODE_PLOT_MIN_FREQ_10powerN": self.min_freq_var.get(),
                 "BODE_PLOT_MAX_FREQ_10powerN": self.max_freq_var.get(),
                 "BODE_PLOT_NB_POINTS": self.nb_points_var.get(),
@@ -405,8 +424,7 @@ class FilterConfigGUI:
                     "Poles": poles
                 }
             }
-        }
-        
+
         return config
     
     def export_json(self):
@@ -474,16 +492,42 @@ class FilterConfigGUI:
         self.filter_delay_var.set(params["ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S"])
         self.adc_delay_var.set(params["ESTIMATED_ADC_TRIGGER_POINT_DELAY"])
         self.coef_format_var.set(params["coefficient_format"])
-        
+        self.plant_file_var.set(self.config.get("plant_data_file", ""))
+
         # Load frequencies
         self.integrator_var.set(params["frequencies_Hz"]["Integrator_pole"][0]["frequency"])
         self.create_frequency_list("Zeros")
         self.create_frequency_list("Poles")
     
+    def validate_pole_zero_count(self):
+        """Check that the number of poles and zeros matches the selected filter type (e.g. 3P3Z)."""
+        filter_type_str = self.type_var.get()
+        try:
+            parts = filter_type_str.upper().replace("Z", "").split("P")
+            expected_poles = int(parts[0])
+            expected_zeros = int(parts[1])
+        except (ValueError, IndexError):
+            return True
+        actual_poles = 1 + len(self.pole_entries)
+        actual_zeros = len(self.zero_entries)
+        expected_s_zeros = expected_zeros - 1
+        errors = []
+        if actual_poles != expected_poles:
+            errors.append(f"Poles: expected {expected_poles} (1 integrator + {expected_poles - 1} poles), got {actual_poles} (1 integrator + {len(self.pole_entries)} poles)")
+        if actual_zeros != expected_s_zeros:
+            errors.append(f"Zeros: expected {expected_s_zeros} in s-domain ({expected_zeros}Z - 1 from bilinear transform), got {actual_zeros}")
+        if errors:
+            messagebox.showerror("Pole/Zero Count Mismatch",
+                f"Filter type {filter_type_str} requires:\n" + "\n".join(errors))
+            return False
+        return True
+
     def run_compensator(self):
         """Run the nPnZ_compensator.py script"""
         try:
-            print("FLAG")
+            if not self.validate_pole_zero_count():
+                return
+
             # First, save the current config to JSON file using filter name
             config = self.collect_config()
             
@@ -497,7 +541,6 @@ class FilterConfigGUI:
             
             with open(config_filepath, 'w') as f:
                 json.dump(config, f, indent=4)
-            print(os.path.abspath(config_filepath))
             
             # Check if nPnZ_compensator.py exists
             compensator_script = os.path.join(script_dir, "nPnZ_compensator.py")

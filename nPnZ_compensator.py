@@ -205,13 +205,13 @@ class filter:
     
     def Update_filter_from_s_polynoms_update (self):
         self.transfer_function_s = TRANSFER_FUNCTION_S(self.numerator.coeffs, self.denominator.coeffs)
-        self.transfer_function_z = TRANSFER_FUNCTION_Z(self.transfer_function_s, Fs)
+        self.transfer_function_z = TRANSFER_FUNCTION_Z(self.transfer_function_s, self.Fs)
         self.bode_data.h_s = self.transfer_function_s.control_tf.frequency_response(omega=self.bode_data.w_s)
         self.bode_data.mag_s = 20 * np.log10(abs(self.bode_data.h_s.magnitude))
         self.bode_data.phase_s = self.bode_data.h_s.phase * (180/np.pi)
         self.Calculate_Z_Transfer_Funtion()
-        self.Harmonize_DSP_Coefficients_Scaling_Q31
-        self.Harmonize_DSP_Coefficients_Scaling_Q15
+        self.Harmonize_DSP_Coefficients_Scaling_Q31()
+        self.Harmonize_DSP_Coefficients_Scaling_Q15()
 
 
 """        
@@ -375,8 +375,8 @@ def main(json_config_file = "./_config/filter_config.json" , verbose = True):
         for each_coeff in Compensator.transfer_function_z.B_Terms_DSP_Q15:
             h_file += "#define " + comp_name_string + "_B" + str(index) + "                          (int16_t) " + str(each_coeff.scaled_value_hex) + "\n"
             index += 1
-        h_file += "#define " + comp_name_string + "_A_TERMS_BIT_SHIFT_SCALING   (int16_t) " + str(Compensator.transfer_function_z.A_Terms_DSP_Q31[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for A Terms\n"
-        h_file += "#define " + comp_name_string + "_B_TERMS_BIT_SHIFT_SCALING   (int16_t) " + str(Compensator.transfer_function_z.B_Terms_DSP_Q31[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for B Terms\n\n"
+        h_file += "#define " + comp_name_string + "_A_TERMS_BIT_SHIFT_SCALING   (int16_t) " + str(Compensator.transfer_function_z.A_Terms_DSP_Q15[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for A Terms\n"
+        h_file += "#define " + comp_name_string + "_B_TERMS_BIT_SHIFT_SCALING   (int16_t) " + str(Compensator.transfer_function_z.B_Terms_DSP_Q15[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for B Terms\n\n"
     h_file += "\n"
     h_file += "#endif   //" + Compensator.name.upper() + "_H\n"
         
@@ -389,11 +389,6 @@ def main(json_config_file = "./_config/filter_config.json" , verbose = True):
     
     """ BODE PLOTS """
     try:
-        if data_from_json["plant_data_file"] == "":
-            raise Exception("No plant data file specified")
-        if not os.path.isfile(data_from_json["plant_data_file"]):
-            print(os.path)
-            raise Exception("Plant data file not found")
         plant_data_file = data_from_json["plant_data_file"]
         CompPlt, axs = plt.subplots(2,2, figsize=(13, 8))
         CompGainPlt =axs[0,0]
@@ -401,7 +396,7 @@ def main(json_config_file = "./_config/filter_config.json" , verbose = True):
         PlantGainPlt = axs[0,1]
         PlantPhasePlt = axs[1,1]
         plant_data_file_found = True
-    except: 
+    except KeyError:
         CompPlt, axs = plt.subplots(2,1, figsize=(10, 8))
         CompGainPlt = axs[0]
         CompPhasePlt = axs[1]
@@ -446,7 +441,6 @@ def main(json_config_file = "./_config/filter_config.json" , verbose = True):
     CompPhasePlt.set_yticks(np.arange(-180, 181, 20))
     
     #Plant data graph
-    print(plant_data_file_found)
     if plant_data_file_found == True:
         plant_data_file = data_from_json["plant_data_file"]
         flag_return, Plant_RAW = plant.main(plant_data_file)

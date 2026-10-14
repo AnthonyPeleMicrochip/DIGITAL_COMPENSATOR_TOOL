@@ -8,7 +8,7 @@
     "author": "Anthony PELE - M24683",
     "company": "Microchip Technology Inc.",
     "date": "2025-11-19",
-    "plant_data_file": "../PLANT.txt",
+    "plant_data_file": "PLANT.txt",
     "filter_parameters": 
     {
         "BODE_PLOT_MIN_FREQ_10powerN": 0,

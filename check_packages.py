@@ -68,7 +68,7 @@ def install_package(package_name: string) -> flag:
 **************************************************************************************************************************************
 """
 def main():
-    package_name_test ='numpy123'
+    package_name_test ='numpy'
     retval = check_package_installed(package_name_test)
     if display_output:
         if retval == flag.OK:

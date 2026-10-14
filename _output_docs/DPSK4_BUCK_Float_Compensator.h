@@ -5,11 +5,11 @@
 * DSP Coefficient header file generation in FLOAT format
 ****************************************************************************************
 * POLES AND ZEROS LOCATIONS:
-*   fP0 Pole at Origin Frequency: 1200 Hz
-*   fZ1 Zero Frequency: 2551 Hz
-*   fZ2 Zero Frequency: 3827 Hz
-*   fP1 Pole Frequency: 80000 Hz
-*   fP2 Pole Frequency: 170000 Hz
+*   fP0 Pole at Origin Frequency: 1200.0 Hz
+*   fZ1 Zero Frequency: 2551.0 Hz
+*   fZ2 Zero Frequency: 3827.0 Hz
+*   fP1 Pole Frequency: 80000.0 Hz
+*   fP2 Pole Frequency: 170000.0 Hz
 ****************************************************************************************/
 // DSP IIR Filter Coefficients for Compensator: dpsk4_buck_float_vcomp in FLOAT format 
 #define DPSK4_BUCK_FLOAT_VCOMP_A1                        (float) 1.298029

@@ -2,7 +2,7 @@
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>&ast;Filter Configuration Generator GUI - Documentation&ast;</title>
+            <title>Filter Configuration Generator GUI - Documentation</title>
             <style>
 /* From extension vscode.github */
 /*---------------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 }
 
 </style>
-            
+
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
 <style>
@@ -135,12 +135,14 @@
 }
 
 </style>
-        
+
         </head>
         <body class="vscode-body vscode-light">
             <div>
-<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/python/digital_power/Compensator/Digital_Compensator_Tool/_source_docs/microchip-logo2.png" width="200"/>
+<img src="./_source_docs/microchip-logo2.png" width="200"/>
 </div>
+<p>The compensator script can also be used standalone from the command line without this GUI.
+<a href="./README.html">Link to standalone command-line User's Guide</a></p>
 <h1 id="filter-configuration-generator-gui---documentation"><em>Filter Configuration Generator GUI - Documentation</em></h1>
 <h2 id="overview"><em>Overview</em></h2>
 <p>The Filter Configuration Generator GUI is a Python-based graphical user interface built with Tkinter that allows users to create, edit, and manage digital filter configuration files for compensator systems. The tool is specifically designed for nPnZ (n-Pole n-Zero) filter design and interfaces with the <code>nPnZ_compensator.py</code> script to generate filter coefficients.</p>
@@ -167,9 +169,11 @@
 <li>Ensure Python 3.6+ is installed on your system</li>
 <li>Download <code>filter_config_gui.py</code> to your working directory</li>
 <li>Place <code>nPnZ_compensator.py</code> in the same directory</li>
-<li>Run the GUI without parameter (it will load default configuration):<pre><code class="language-bash">python filter_config_gui.py
+<li>Run the GUI without parameter (it will load default configuration):
+<pre><code class="language-bash">python filter_config_gui.py
 </code></pre>
-or run the GUI with a custom configuration file as parameter to load default configuration from an existing file:<pre><code class="language-bash">python filter_config_gui.py ./_config/filter_config_DPSK4_BUCK_Q31.json
+or run the GUI with a custom configuration file as parameter to load default configuration from an existing file:
+<pre><code class="language-bash">python filter_config_gui.py ./_config/filter_config_DPSK4_BUCK_Q31.json
 </code></pre>
 </li>
 </ol>
@@ -233,14 +237,14 @@ or run the GUI with a custom configuration file as parameter to load default con
 <p><strong>Bode Plot Min Freq (10^N)</strong>: Minimum frequency for Bode plot as power of 10</p>
 <ul>
 <li>Range: -10 to 10</li>
-<li>Default: 0 (represents 10^0 = 1 Hz)</li>
+<li>Default: 0 (represents 10<sup>0</sup> = 1 Hz)</li>
 </ul>
 </li>
 <li>
 <p><strong>Bode Plot Max Freq (10^N)</strong>: Maximum frequency for Bode plot as power of 10</p>
 <ul>
 <li>Range: -10 to 10</li>
-<li>Default: 6 (represents 10^6 = 1 MHz)</li>
+<li>Default: 6 (represents 10<sup>6</sup> = 1 MHz)</li>
 </ul>
 </li>
 <li>
@@ -287,6 +291,17 @@ or run the GUI with a custom configuration file as parameter to load default con
 <li>Default: float</li>
 </ul>
 </li>
+<li>
+<p><strong>Plant Data File (optional)</strong>: Path to a tab-delimited text file containing plant (power stage) Bode data (frequency, gain, phase)</p>
+<ul>
+<li>Use the &quot;Browse...&quot; button to select a file, or type the path manually</li>
+<li>When a plant file is provided, the Bode plot output will include an overlay of the open-loop response (plant + compensator) alongside the compensator-only plots</li>
+<li>When left empty, only the compensator Bode plot is generated</li>
+<li>When loading a JSON configuration that already contains a <code>&quot;plant_data_file&quot;</code> key, the field is automatically populated with that path</li>
+<li>The plant data file is expected to be a tab-separated text file with columns: Frequency (Hz), Gain (dB), Phase (degrees), with a header row that is skipped during parsing</li>
+<li>Default: empty (no plant data)</li>
+</ul>
+</li>
 </ul>
 <h3 id="3-frequencies-configuration-bottom-panel">3. Frequencies Configuration (Bottom Panel)</h3>
 <p>Defines the pole and zero locations for the filter transfer function:</p>
@@ -324,14 +339,14 @@ or run the GUI with a custom configuration file as parameter to load default con
 <li>Default: Two poles at 80000 Hz and 170000 Hz</li>
 </ul>
 <h2 id="action-buttons">Action Buttons</h2>
-<h3 id="-load-json">📂 Load JSON</h3>
+<h3 id="-load-json">&#128194; Load JSON</h3>
 <ul>
 <li>Opens a file browser to select an existing JSON configuration file</li>
 <li>Default directory: Same folder as the Python script</li>
 <li>Loads all parameters from the selected file into the GUI</li>
 <li>Validates JSON structure before loading</li>
 </ul>
-<h3 id="️-generate-coefficients">⚙️ Generate Coefficients</h3>
+<h3 id="-generate-coefficients">&#9881;&#65039; Generate Coefficients</h3>
 <p>Performs the following actions:</p>
 <ol>
 <li>Collects all current parameters from the GUI</li>
@@ -360,6 +375,7 @@ or run the GUI with a custom configuration file as parameter to load default con
     <span class="hljs-attr">&quot;author&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Author Name&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;company&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Microchip Technology Inc.&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2025-11-26&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;plant_data_file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;PLANT.txt&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;filter_parameters&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
         <span class="hljs-attr">&quot;BODE_PLOT_MIN_FREQ_10powerN&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span>
         <span class="hljs-attr">&quot;BODE_PLOT_MAX_FREQ_10powerN&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">6</span><span class="hljs-punctuation">,</span>
@@ -368,7 +384,6 @@ or run the GUI with a custom configuration file as parameter to load default con
         <span class="hljs-attr">&quot;ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">7e-07</span><span class="hljs-punctuation">,</span>
         <span class="hljs-attr">&quot;ESTIMATED_ADC_TRIGGER_POINT_DELAY&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1e-06</span><span class="hljs-punctuation">,</span>
         <span class="hljs-attr">&quot;coefficient_format&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;float&quot;</span><span class="hljs-punctuation">,</span>
-        <span class="hljs-attr">&quot;plant_data_file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;PLANT.txt&quot;</span><span class="hljs-punctuation">,</span>
         <span class="hljs-attr">&quot;frequencies_Hz&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
             <span class="hljs-attr">&quot;Integrator_pole&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
                 <span class="hljs-punctuation">{</span>
@@ -425,7 +440,7 @@ or run the GUI with a custom configuration file as parameter to load default con
 <li>Poles: 50000 Hz, 100000 Hz</li>
 </ul>
 </li>
-<li>Click &quot;⚙️ Generate Coefficients&quot;</li>
+<li>Click &quot;&#9881;&#65039; Generate Coefficients&quot;</li>
 <li>Review output in popup window</li>
 <li>Files generated:
 <ul>
@@ -438,10 +453,10 @@ or run the GUI with a custom configuration file as parameter to load default con
 <h3 id="example-2-modifying-an-existing-configuration"><em>Example 2: Modifying an Existing Configuration</em></h3>
 <ol>
 <li>Launch the GUI</li>
-<li>Click &quot;📂 Load JSON&quot;</li>
+<li>Click &quot;&#128194; Load JSON&quot;</li>
 <li>Select your existing configuration file</li>
 <li>Modify desired parameters</li>
-<li>Click &quot;⚙️ Generate Coefficients&quot; to regenerate</li>
+<li>Click &quot;&#9881;&#65039; Generate Coefficients&quot; to regenerate</li>
 </ol>
 <h3 id="example-3-comparing-different-coefficient-formats"><em>Example 3: Comparing Different Coefficient Formats</em></h3>
 <ol>
@@ -522,7 +537,7 @@ base_config = {
     config = base_config.copy()
     config[<span class="hljs-string">&quot;name&quot;</span>] = <span class="hljs-string">f&quot;filter_<span class="hljs-subst">{freq}</span>Hz&quot;</span>
     config[<span class="hljs-string">&quot;filter_parameters&quot;</span>][<span class="hljs-string">&quot;SAMPLING_FREQUENCY_HZ&quot;</span>] = freq
-    
+
     <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">f&quot;filter_<span class="hljs-subst">{freq}</span>Hz.json&quot;</span>, <span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> f:
         json.dump(config, f, indent=<span class="hljs-number">4</span>)
 </code></pre>
@@ -539,6 +554,24 @@ base_config = {
 <p>For issues with the <code>nPnZ_compensator.py</code> script, refer to its separate documentation.</p>
 <h2 id="version-history"><em>Version History</em></h2>
 <ul>
+<li><strong>v2.0</strong> (2026-10-14): Bug fixes and improvements
+<ul>
+<li><strong>Bug fixes (nPnZ_compensator.py):</strong>
+<ul>
+<li>Fixed missing parentheses on <code>Harmonize_DSP_Coefficients_Scaling_Q31()</code> and <code>_Q15()</code> method calls (were no-ops)</li>
+<li>Fixed Q15 header output incorrectly using Q31 bit-shift scaling values instead of Q15 values</li>
+<li>Fixed <code>Fs</code> variable scope issue in <code>Update_filter_from_s_polynoms_update()</code> (now uses <code>self.Fs</code>)</li>
+<li>Fixed bare <code>except</code> clause narrowed to <code>except KeyError</code> to avoid masking unrelated errors</li>
+</ul>
+</li>
+<li><strong>Improvements (filter_config_gui.py):</strong>
+<ul>
+<li>Added pole/zero count validation against selected filter type (e.g. 3P3Z expects 3 poles and 2 zeros in s-domain)</li>
+<li>Added Plant Data File selector field with Browse button for optional plant Bode data overlay</li>
+</ul>
+</li>
+</ul>
+</li>
 <li><strong>v1.0</strong> (2025-11-26): Initial release
 <ul>
 <li>Basic filter configuration GUI</li>
@@ -552,10 +585,9 @@ base_config = {
 <h2 id="license"><em>License</em></h2>
 <p>This tool is provided for use within Microchip Technology Inc. projects. Refer to your organization's software licensing policy for usage terms.</p>
 <div>
-<img src="file:////Users/tony/Library/CloudStorage/OneDrive-Personnel/dev/python/digital_power/Compensator/Digital_Compensator_Tool/_source_docs/microchip-logo2.png" width="200"/>
+<img src="./_source_docs/microchip-logo2.png" width="200"/>
 </div>
 
-            
-            
+
         </body>
         </html>
