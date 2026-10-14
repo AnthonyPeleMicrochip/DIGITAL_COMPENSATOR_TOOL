@@ -1,0 +1,48 @@
+{
+    "name": "dpsk4_buck_Q15_vcomp",
+    "h_file_name": "Dpsk4_Buck_Q15_Vcomp.h",
+    "bode_plot_output_file_name": "Dpsk4_Buck_Q15_Vcomp_Bode_Plot.pdf",
+    "type": "3P3Z",
+    "version": "1.0.0",
+    "description": "3P3Z Buck Voltage Compensator for DPSK3, for Q31 Fixed point format",
+    "author": "Anthony PELE - M24683",
+    "company": "Microchip Technology Inc.",
+    "date": "2026-10-14",
+    "filter_parameters": {
+        "BODE_PLOT_MIN_FREQ_10powerN": 0,
+        "BODE_PLOT_MAX_FREQ_10powerN": 6,
+        "BODE_PLOT_NB_POINTS": 1000,
+        "SAMPLING_FREQUENCY_HZ": 500000.0,
+        "ESTIMATED_DIGITAL_FILTER_TIME_DELAY_IN_S": 4e-07,
+        "ESTIMATED_ADC_TRIGGER_POINT_DELAY": 1e-06,
+        "coefficient_format": "Q15",
+        "frequencies_Hz": {
+            "Integrator_pole": [
+                {
+                    "frequency": 90.0,
+                    "type": "Integrator"
+                }
+            ],
+            "Zeros": [
+                {
+                    "frequency": 2551.0,
+                    "type": "Zero"
+                },
+                {
+                    "frequency": 3827.0,
+                    "type": "Zero"
+                }
+            ],
+            "Poles": [
+                {
+                    "frequency": 80000.0,
+                    "type": "Pole"
+                },
+                {
+                    "frequency": 170000.0,
+                    "type": "Pole"
+                }
+            ]
+        }
+    }
+}

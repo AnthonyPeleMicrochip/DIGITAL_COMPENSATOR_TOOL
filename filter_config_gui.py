@@ -258,7 +258,8 @@ class FilterConfigGUI:
         button_frame.grid(row=2, column=0, columnspan=2, pady=10)
         
         ttk.Button(button_frame, text="📂 Load JSON", command=self.load_json, width=20).grid(row=0, column=0, padx=5)
-        ttk.Button(button_frame, text="⚙️ Generate Coefficients", command=self.run_compensator, width=25).grid(row=0, column=1, padx=5)
+        ttk.Button(button_frame, text="💾 Save Configuration", command=self.save_config_as, width=25).grid(row=0, column=1, padx=5)
+        ttk.Button(button_frame, text="⚙️ Generate Coefficients", command=self.run_compensator, width=25).grid(row=0, column=2, padx=5)
     
     def browse_plant_file(self):
         """Open file dialog to select a plant data text file."""
@@ -427,23 +428,28 @@ class FilterConfigGUI:
 
         return config
     
-    def export_json(self):
-        """Export configuration to JSON file"""
+    def save_config_as(self):
+        """Save configuration to a JSON file chosen by the user, or default to {filter_name}.json"""
         try:
             config = self.collect_config()
-            
-            # Get the directory where the script is located
             script_dir = os.path.dirname(os.path.abspath(__file__))
-            
-            # Use filter name for the filename
-            filter_name = self.name_var.get()
-            filename = os.path.join(script_dir, f"{filter_name}.json")
-            
+
+            filename = filedialog.asksaveasfilename(
+                initialdir=script_dir,
+                title="Save Configuration As",
+                defaultextension=".json",
+                filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+            )
+
+            if not filename:
+                filter_name = self.name_var.get()
+                filename = os.path.join(script_dir, f"{filter_name}.json")
+
             with open(filename, 'w') as f:
                 json.dump(config, f, indent=4)
-            messagebox.showinfo("Success", f"Configuration exported to:\n{filename}")
+            messagebox.showinfo("Success", f"Configuration saved to:\n{filename}")
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to export configuration:\n{str(e)}")
+            messagebox.showerror("Error", f"Failed to save configuration:\n{str(e)}")
     
     def load_json(self):
         """Load configuration from JSON file"""

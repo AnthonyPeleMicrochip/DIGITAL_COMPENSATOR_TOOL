@@ -34,6 +34,7 @@ import matplotlib
 import json
 import Qn_Fractional_lib as Qn
 import get_plant_from_txt as plant
+from header_gen import generate_header_file, HeaderGenContext
 
 
 """        
@@ -313,72 +314,19 @@ def main(json_config_file = "./_config/filter_config.json" , verbose = True):
         Compensator.bode_data.phase_z_with_erosion[index] = Compensator.bode_data.phase_z[index] + (Compensator.bode_data.dPhi_Erosion_factor * (f))
         index += 1
     
-    # Compute string for header file contruction as output (coefficients C constants)
+    # Generate header file content via format-specific generator
     comp_name_string = str(Compensator.name.replace(" ", "_").upper())
     comp_format = (data_from_json["filter_parameters"]["coefficient_format"]).upper()
-    """ DSP Coefficient header file generartion in Q15, Q31, Float formats """
-    h_file = ""
-    h_file += "#ifndef " + comp_name_string + "_H\n"
-    h_file += "#define " + comp_name_string + "_H\n\n"
-    h_file += "/***************************************************************************************\n"
-    h_file += "* DSP Coefficient header file generation in " + comp_format + " format\n"
-    h_file += "****************************************************************************************\n"
-    h_file += "* POLES AND ZEROS LOCATIONS:\n"
-    h_file += "*   fP0 Pole at Origin Frequency: " + str(FP0_FREQ) + " Hz\n"
-    index = 0
-    for each in Zeros:
-        h_file += "*   fZ" + str(index+1) + " Zero Frequency: " + str(each.freq) + " Hz\n"
-        index += 1
-    index = 0
-    for each in Poles:
-        h_file += "*   fP" + str(index+1) + " Pole Frequency: " + str(each.freq) + " Hz\n"
-        index += 1
-    h_file += "****************************************************************************************/\n"
-    # Float format declarations
-    if comp_format == "FLOAT":
-        h_file += "// DSP IIR Filter Coefficients for Compensator: " + Compensator.name + " in FLOAT format \n"
-        index = 0
-        for each_coeff in Compensator.transfer_function_z.A_Terms_DSP_float:
-            h_file += "#define " + comp_name_string +"_A" + str(index + 1) + "                        (float) " + str(each_coeff) + "\n"
-            index += 1
-        index = 0
-        for each_coeff in Compensator.transfer_function_z.B_Terms_DSP_float:
-            h_file += "#define " + comp_name_string +"_B" + str(index) + "                        (float) " + str(each_coeff) + "\n"
-            index += 1
-        h_file += "\n"
-        
-    # Q31 format declarations in dual bit shift scaling
-    if comp_format == "Q31":
-        h_file += "// DSP IIR Filter Coefficients for Compensator: " + Compensator.name + " in Q31 format \n"
-        Compensator.Harmonize_DSP_Coefficients_Scaling_Q31()
-        index = 0
-        for each_coeff in Compensator.transfer_function_z.A_Terms_DSP_Q31:
-            h_file += "#define " + comp_name_string + "_A" + str(index + 1) + "                          (int32_t) " + str(each_coeff.scaled_value_hex) + "\n"
-            index += 1
-        index = 0
-        for each_coeff in Compensator.transfer_function_z.B_Terms_DSP_Q31:
-            h_file += "#define " + comp_name_string + "_B" + str(index) + "                          (int32_t) " + str(each_coeff.scaled_value_hex) + "\n"
-            index += 1
-        h_file += "#define " + comp_name_string + "_A_TERMS_BIT_SHIFT_SCALING   (int32_t) " + str(Compensator.transfer_function_z.A_Terms_DSP_Q31[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for A Terms\n"
-        h_file += "#define " + comp_name_string + "_B_TERMS_BIT_SHIFT_SCALING   (int32_t) " + str(Compensator.transfer_function_z.B_Terms_DSP_Q31[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for B Terms\n\n"
-        h_file += "\n"
-        
-    # Q15 format declarations in dual bit shift scaling
-    if comp_format == "Q15":
-        h_file += "// DSP IIR Filter Coefficients for Compensator: " + Compensator.name + " in Q15 format \n"
-        Compensator.Harmonize_DSP_Coefficients_Scaling_Q15()
-        index = 0
-        for each_coeff in Compensator.transfer_function_z.A_Terms_DSP_Q15:
-            h_file += "#define " + comp_name_string + "_A" + str(index + 1) + "                          (int16_t) " + str(each_coeff.scaled_value_hex) + "\n"
-            index += 1
-        index = 0
-        for each_coeff in Compensator.transfer_function_z.B_Terms_DSP_Q15:
-            h_file += "#define " + comp_name_string + "_B" + str(index) + "                          (int16_t) " + str(each_coeff.scaled_value_hex) + "\n"
-            index += 1
-        h_file += "#define " + comp_name_string + "_A_TERMS_BIT_SHIFT_SCALING   (int16_t) " + str(Compensator.transfer_function_z.A_Terms_DSP_Q15[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for A Terms\n"
-        h_file += "#define " + comp_name_string + "_B_TERMS_BIT_SHIFT_SCALING   (int16_t) " + str(Compensator.transfer_function_z.B_Terms_DSP_Q15[0].bit_shift_scaler) + "  // Common Bit Shift Scaling for B Terms\n\n"
-    h_file += "\n"
-    h_file += "#endif   //" + Compensator.name.upper() + "_H\n"
+    ctx = HeaderGenContext(
+        comp_name_string=comp_name_string,
+        comp_display_name=Compensator.name,
+        comp_format=comp_format,
+        fp0_freq=FP0_FREQ,
+        zeros_freqs=[z.freq for z in Zeros],
+        poles_freqs=[p.freq for p in Poles],
+        compensator=Compensator,
+    )
+    h_file = generate_header_file(ctx)
         
     # Write h_file to coeffs.h
     output_file_path = os.path.join(os.path.dirname(__file__), header_file_name)
