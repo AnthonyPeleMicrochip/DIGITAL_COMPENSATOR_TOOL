@@ -582,9 +582,12 @@ class FilterConfigGUI:
                     "Please ensure nPnZ_compensator.py is in the same directory.")
                 return
             
-            # Run the Python script with JSON filename as argument
+            # Use sys.executable for cross-platform compatibility (macOS/Linux/Windows)
+            # On macOS, 'python' may not exist or point to Python 2; sys.executable
+            # always points to the exact interpreter running this GUI script.
+            python_exe = sys.executable
             result = subprocess.run(
-                ["python", "nPnZ_compensator.py", config_filename],
+                [python_exe, "nPnZ_compensator.py", config_filename],
                 capture_output=True,
                 text=True,
                 cwd=script_dir
@@ -599,7 +602,7 @@ class FilterConfigGUI:
             output_text.pack(expand=True, fill='both', padx=10, pady=10)
             
             output_text.insert(tk.END, f"Configuration saved to: {config_filepath}\n")
-            output_text.insert(tk.END, f"Running: python nPnZ_compensator.py {config_filename}\n\n")
+            output_text.insert(tk.END, f"Running: {python_exe} nPnZ_compensator.py {config_filename}\n\n")
             output_text.insert(tk.END, "=== STDOUT ===\n")
             output_text.insert(tk.END, result.stdout)
             output_text.insert(tk.END, "\n=== STDERR ===\n")
